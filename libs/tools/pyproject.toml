@@ -20,9 +20,10 @@ all = "tools.code_audit:all"
 python = "^3.11"
 click = "^8.1.7"
 halo = "^0.0.31"
-pylama = {version="^8.4.1", extras=["mypy", "toml"]}
+pylama = {version="^8.4.1", extras=["mypy", "pylint", "toml"]}
 black = "^23.1.0"
 bandit = "^1.7.6"
 # Fix pylama broken behavior with recent pydocstyle version
 pydocstyle = "~6.1.1"
 pytest = "^7.4.3"
+isort = "^5.13.2"

@@ -21,7 +21,7 @@ build-backend = "poetry.core.masonry.api"
 fmt = "tools.code_audit:fmt"
 lint = "tools.code_audit:lint"
 secu = "tools.code_audit:secu"
-all = "tools.code_audit:all"
+all = "tools.code_audit:all_cmd"
 
 [tool.poetry.group.test.dependencies]
 tools = {path="./libs/tools", develop=true}
@@ -36,7 +36,7 @@ skips = ["B101", "B601"]
 
 [tool.pylama]
 format = "pylint"
-skip = "*/.tox/*,*/.env/*,.*,.*/*,**/__pycache__/*,**/.venv/*"
+skip = "*/.tox/*,*/.env/*,.*,.*/*,**/__pycache__/*,**/.venv/*,**/test*/*"
 linters = "pylint,pydocstyle,pycodestyle,mypy"
 ignore = "F0401,C0111,E731"
 
@@ -46,3 +46,66 @@ max_line_length = 120
 [tool.pylama.linter.pylint]
 max_line_length = 120
 disable = "R"
+
+[tool.mypy]
+show_error_codes = true
+show_error_context = true
+show_column_numbers = true
+show_traceback = true
+
+# By default, imported values to a module are treated as exported and mypy allows other modules to import them.
+# This flag changes the behavior to not re-export unless the item is imported using from-as or is included in __all__.
+no_implicit_reexport = true
+
+# Prohibit equality checks, identity checks, and container checks between non-overlapping types.
+strict_equality = true
+
+# Ignore missing imports errors when importing third-party modules.
+ignore_missing_imports = true
+follow_imports = "normal"
+
+# Disallows defining functions without type annotations or with incomplete type annotations.
+disallow_incomplete_defs = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+allow_untyped_globals = false
+
+# Disallows explicit Any in type positions such as type annotations and generic type parameters.
+disallow_any_generics = true
+disallow_any_explicit = true
+
+# Type-checks the interior of functions without type annotations.
+check_untyped_defs = true
+
+# Enables strict Optional checks. If false, mypy treats None as compatible with every type.
+no_implicit_optional = true
+strict_optional = true
+
+# Shows errors for missing return statements on some execution paths.
+warn_no_return = false
+#                ^ already covered by `pylint`
+
+# Shows a warning when encountering any code inferred to be unreachable or redundant after performing type analysis.
+warn_unreachable = false
+#                  ^ already covered by `pylint`
+
+# This flag will make mypy report an error whenever your code uses an unnecessary cast that can safely be removed.
+warn_redundant_casts = true
+
+# This flag will make mypy report an error whenever your code uses a # type: ignore
+# comment on a line that is not actually generating an error message.
+warn_unused_ignores = true
+
+# This flag causes mypy to generate a warning when returning a value with
+# type Any from a function declared with a non-Any return type.
+warn_return_any = true
+
+# Allows variables to be redefined with an arbitrary type, as long as the redefinition is in the same block and nesting level as the original definition.
+allow_redefinition = true
+
+# Enable mypy optional plugins, for now enable `pydantic`, sql.
+# plugins = ["pydantic.mypy","sqlmypy"]
+
+
+[tool.isort]
+line_length = 120
