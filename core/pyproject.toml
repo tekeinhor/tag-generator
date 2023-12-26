@@ -24,31 +24,5 @@ click = "^8.1.7"
 halo = "^0.0.31"
 
 
-
 [tool.poetry.dev-dependencies]
-# pylama = "^8.4.1"
-# black = "^23.1.0"
-# bandit = "^1.7.6"
-# mypy = "^1.8.0"
 tools = {path="../libs/tools", develop=true}
-
-[tool.black]
-line-length = 120
-
-# [tool.bandit]
-# exclude_dirs = ["tests", "path/to/file"] #TO DO
-# tests = ["B201", "B301"]
-# skips = ["B101", "B601"]
-
-# [tool.pylama]
-# format = "pylint"
-# skip = "*/.tox/*,*/.env/*"
-# linters = "pylint,pydocstyle,pycodestyle,mypy"
-# ignore = "F0401,C0111,E731"
-
-# [tool.pylama.linter.pycodestyle]
-# max_line_length = 120
-
-# [tool.pylama.linter.pylint]
-# max_line_length = 120
-# disable = "R"

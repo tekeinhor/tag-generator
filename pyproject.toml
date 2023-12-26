@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "monorepo"
+version = "0.1.0"
+description = ""
+authors = ["Tatiana <tatiana.ekeinhor@gmail.com>"]
+readme = "README.md"
+packages = [
+    { include = "tools", from = "libs"},
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.poetry.scripts]
+fmt = "tools.code_audit:fmt"
+lint = "tools.code_audit:lint"
+secu = "tools.code_audit:secu"
+all = "tools.code_audit:all"
+
+[tool.poetry.group.test.dependencies]
+tools = {path="./libs/tools", develop=true}
+
+[tool.black]
+line-length = 120
+
+[tool.bandit]
+exclude_dirs = ["tests", "**/.venv/*", "**/__pycache__/*"]
+tests = ["B201", "B301"]
+skips = ["B101", "B601"]
+
+[tool.pylama]
+format = "pylint"
+skip = "*/.tox/*,*/.env/*,.*,.*/*,**/__pycache__/*,**/.venv/*"
+linters = "pylint,pydocstyle,pycodestyle,mypy"
+ignore = "F0401,C0111,E731"
+
+[tool.pylama.linter.pycodestyle]
+max_line_length = 120
+
+[tool.pylama.linter.pylint]
+max_line_length = 120
+disable = "R"

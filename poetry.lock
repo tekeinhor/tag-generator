@@ -618,7 +618,7 @@ pytest = "^7.4.3"
 
 [package.source]
 type = "directory"
-url = "../libs/tools"
+url = "libs/tools"
 
 [[package]]
 name = "typing-extensions"
@@ -634,4 +634,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "56ebe5164aadb34acca26c70f8c26f9df3a61e1d54dc267c4c36bdab6907bb83"
+content-hash = "6730e53c53bbca3d899bd465368e5d6a7f030c5498f27b69ceb71b5f2609d4c6"

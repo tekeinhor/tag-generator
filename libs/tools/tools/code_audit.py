@@ -5,17 +5,18 @@ from halo import Halo
 import click
 
 linters_cmd = {
-    "pylama": {"command": ["pylama"]},
+    "pylama": {"command": ["pylama", "--options", "pyproject.toml"]},
     "mypy": {"command": ["mypy"]},
 }
 
 security_cmd = {
-    "bandit": {"command": ["bandit"]},
+    "bandit": {"command": ["bandit", "-c", "pyproject.toml", "-r"]},
 }
 
 fmt_cmd = {
-    "black": {"command": ["black", "."]},
+    "black": {"command": ["black"]},
 }
+
 
 
 def read_config() -> str:
@@ -27,13 +28,15 @@ def read_config() -> str:
         print("⛔️ Config file not found")
 
 
-def run_command(kwargs: Dict[str, Dict[str, List[str]]]):
+def run_command(kwargs: Dict[str, Dict[str, List[str]]], project_name=None):
     """Run all command"""
-    project_name = read_config()
+    if not project_name:
+        project_name = read_config()
+
     for name, command in kwargs.items():
         spinner = Halo(text=f">> Running {name}...", spinner="arc", placement="right")
         spinner.start()
-        result = subprocess.run(command["command"] + [project_name])
+        result = subprocess.run(args=command["command"] + [project_name])
         if result.returncode == 0:
             spinner.succeed()
         else:
@@ -46,26 +49,31 @@ def cli():
 
 
 @click.command(name="fmt")
-def fmt() -> None:
+@click.option("-p", "--project", default=".")
+def fmt(project) -> None:
     """Format the projet using black."""
-    run_command(fmt_cmd)
+    run_command(fmt_cmd, project)
 
 
 @click.command(name="lint")
-def lint():
+@click.option("-p", "--project", default=".")
+def lint(project):
     """Apply all static checkers to the projet."""
-    run_command(linters_cmd)
+    run_command(linters_cmd, project)
 
 
 @click.command(name="secu")
-def secu():
+@click.option("-p", "--project", default=".")
+def secu(project):
     """Apply all static checkers to the projet."""
-    run_command(security_cmd)
+    run_command(security_cmd, project)
 
 
 @click.command(name="all")
-def all():
-    run_command(linters_cmd | security_cmd | fmt_cmd)
+@click.option("-p", "--project", default=".")
+def all(project):
+    run_command(linters_cmd | security_cmd | fmt_cmd, project)
+
 
 
 cli.add_command(fmt)
