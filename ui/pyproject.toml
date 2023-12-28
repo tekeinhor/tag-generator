@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "ui"
+version = "0.1.0"
+description = ""
+authors = ["Tatiana <tatiana.ekeinhor@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+streamlit = "^1.29.0"
+streamlit-authenticator = "^0.2.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+fmt = "tools.code_audit:fmt"
+lint = "tools.code_audit:lint"
+secu = "tools.code_audit:secu"
+all = "tools.code_audit:all_cmd"
+
+[tool.poetry.group.test.dependencies]
+tools = {path="../libs/tools", develop=true}

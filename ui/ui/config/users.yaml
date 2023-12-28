@@ -1,0 +1,10 @@
+credentials:
+  usernames:
+    admin:
+      email: tatia.dev@gmail.com
+      name: Tatiana
+      password: "$2b$12$3ZSmKm.uYVZJE1sGaJRlu.6cqJZWeqgs6jZVOfwrLm63rjNm3JMFK" # Placeholder for hashed password of 'abc''
+cookie:
+  expiry_days: 30
+  key: admin_signature_key # Must be string
+  name: admin_cookie
