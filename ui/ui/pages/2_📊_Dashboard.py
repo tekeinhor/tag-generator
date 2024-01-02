@@ -1,10 +1,10 @@
 """Admin page for monitoring."""
 from pathlib import Path
 
-import yaml
-from yaml.loader import SafeLoader
 import streamlit as st
 import streamlit_authenticator as stauth
+import yaml
+from yaml.loader import SafeLoader
 
 print(Path(__file__).resolve())
 current_file = Path(__file__)

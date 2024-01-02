@@ -35,3 +35,10 @@ $ poetry run fmt -p core
 $ exit (or deactivate)
 
 ```
+
+
+For mypy to work correctly it requires
+```sh
+# install mypy stubs
+$ mypy --install-types
+```
