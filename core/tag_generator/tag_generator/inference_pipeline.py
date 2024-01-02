@@ -3,7 +3,7 @@ import joblib
 import nltk
 import spacy
 from nltk.corpus import stopwords
-from tag_generator.feature_pipeline import test_input_data
+from tag_generator.tag_generator.feature_pipeline import test_input_data
 from tools.logger import logger
 
 if __name__ == "__main__":
