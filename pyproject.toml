@@ -11,8 +11,9 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.11"
-ui = {path="ui"}
+ui = {path="ui", develop=true}
 tag_generator = {path="core", develop=true}
+api = {path="api", develop=true}
 
 
 [tool.poetry.group.test.dependencies]
