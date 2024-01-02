@@ -38,13 +38,13 @@ def run_command(kwargs: Dict[str, Dict[str, List[str]]], project_name: str = "")
         project_name = read_config()
 
     for name, command in kwargs.items():
-        spinner = Halo(text=f">> Running {name}...\n", spinner="arc", placement="right")
+        spinner = Halo(text=f">> Running `{name}`... ", spinner="arc", placement="left")
         spinner.start()
         result = subprocess.run(args=command["command"] + [project_name], check=False)
         if result.returncode == 0:
-            spinner.succeed()
+            spinner.succeed(f"End: {name}")
         else:
-            spinner.fail()
+            spinner.fail(f"End: {name}")
 
 
 @click.group()
