@@ -2,6 +2,8 @@
 from datetime import datetime
 from pathlib import Path
 from typing import List
+from functools import wraps
+import time
 
 import nltk
 import pandas as pd
@@ -9,7 +11,7 @@ import spacy
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from spacy.language import Language
-from tag_generator.preprocessing import (contains_code, count, detect_extension, detect_lang, extract_tags, filter_tag,
+from tag_generator.tag_generator.preprocessing import (contains_code, count, detect_extension, detect_lang, extract_tags, filter_tag,
                                          sanitize, text_cleaner, top_k)
 from tools.logger import logger
 from tqdm.auto import tqdm
@@ -19,6 +21,20 @@ nltk.download("stopwords")
 nltk.download("wordnet")
 
 
+
+def timeit(func):
+    """Decorator for function time measurement."""
+    @wraps(func)
+    def timeit_wrapper(*args, **kwargs):
+        start_time = time.perf_counter()
+        result = func(*args, **kwargs)
+        end_time = time.perf_counter()
+        total_time = end_time - start_time
+        print(f'Function {func.__name__}, Took {total_time:.4f} seconds')
+        return result
+    return timeit_wrapper
+
+@timeit
 def create_tags_pipe(data_df: pd.DataFrame, first_k: int) -> pd.DataFrame:
     """Pipe for clean tags."""
     data_df = data_df[data_df["Tags"].notna()]
@@ -30,19 +46,22 @@ def create_tags_pipe(data_df: pd.DataFrame, first_k: int) -> pd.DataFrame:
 
     logger.info("Dropping rows where there are no Tags...")
     tags = data_df.Tags_list.explode().value_counts().to_frame().reset_index()
+
+    print(tags)
     data_df = data_df.drop(data_df[data_df.Tags_count == 0].index).reset_index()
     logger.info("Dropping rows where there are no Tags: %s", data_df.shape)
 
     logger.info("Dropping rows where there are no tags between top tags...")
+
     top_tags = list(tags.Tags_list.iloc[0:first_k])
-    data_df["top_tags"] = data_df["Tags"].progress_apply(lambda x: filter_tag(x, top_tags))
+    data_df["top_tags"] = data_df["Tags_list"].apply(lambda x: filter_tag(x, top_tags))
     data_df["top_tags_count"] = data_df["top_tags"].progress_apply(count)
     data_df = data_df[data_df.top_tags_count > 0]
     logger.info("Dropped rows where there are no Tags: %s", data_df.shape)
 
     return data_df
 
-
+@timeit
 def create_text_pipe(
     data_df: pd.DataFrame, lemmatizer: WordNetLemmatizer, stop_words: List[str], language_model: Language
 ) -> pd.DataFrame:
@@ -52,11 +71,11 @@ def create_text_pipe(
     data_df = data_df[data_df["Body"].notna()]
     logger.info("Dropped rows where there are no Bodys: %s", data_df.shape)
 
-    logger.info("Checking file extension...")
-    data_df["has_ext"] = data_df["Body"].progress_apply(detect_extension)
-    data_df["contains_code"] = data_df["Body"].progress_apply(contains_code)
-    data_df["contains_code"] = data_df["contains_code"].astype(int)
-    logger.info("Checked")
+    # logger.info("Checking file extension...")
+    # data_df[:,"has_ext"] = data_df["Body"].progress_apply(detect_extension)
+    # data_df["contains_code"] = data_df["Body"].progress_apply(contains_code)
+    # data_df[:,"contains_code"] = data_df["contains_code"].astype(int)
+    # logger.info("Checked")
 
     logger.info("Detecting lang...")
     data_df["body_without_tags"] = data_df["Body"].progress_apply(sanitize)
@@ -92,7 +111,7 @@ def create_text_pipe(
 
     return data_df
 
-
+@timeit
 def create_pipe(
     data_df: pd.DataFrame, first_k: int, lemmatizer: WordNetLemmatizer, stop_words: List[str], language_model: Language
 ) -> pd.DataFrame:
