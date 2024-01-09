@@ -4,11 +4,11 @@ import tomllib
 from typing import Dict, List
 
 import click
-from halo import Halo  # type: ignore # halo has missing lib that freaks mypy out
+from halo import Halo
 
 linters_cmd = {
     "pylama": {"command": ["pylama", "--options", "pyproject.toml"]},
-    # "mypy": {"command": ["mypy"]},
+    "mypy": {"command": ["mypy", "--config-file", "pyproject.toml"]},
 }
 
 security_cmd = {
