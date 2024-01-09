@@ -1,9 +1,13 @@
-""" Tag generator API based on MultiClass LR model."""
+"""Tag generator API based on MultiClass LR model."""
 
 import uvicorn
-from fastapi import FASTAPI
+from fastapi import FastAPI
+from fastapi.openapi.utils import get_openapi
 
+from api.endpoints import lifespan, router
 from api.settings import settings
+
+VERSION = "0.0.1"
 
 
 def custom_openapi():  # type: ignore # fastapi return a generic type
@@ -16,27 +20,21 @@ def custom_openapi():  # type: ignore # fastapi return a generic type
         summary=settings.API_SUMMARY,
         description=settings.API_DESCRIPTION,
         routes=app.routes,
-        contact={
-            "name": settings.CONTACT_NAME,
-            "email": settings.CONTACT_EMAIL,
-        },
     )
-    openapi_schema["info"]["x-logo"] = {
-        "url": "https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png"
-    }
+    openapi_schema["info"]["x-logo"] = {"url": "https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png"}
     app.openapi_schema = openapi_schema
     return app.openapi_schema
 
 
-app = FASTAPI(
-    lifespan=endpoints.lifespan,
+app = FastAPI(
+    lifespan=lifespan,
     title=settings.API_TITLE,
     description=settings.API_DESCRIPTION,
-    version="",
+    version=VERSION,
 )
 
-app.include_router(endpoints.router)
-app.openapi = custom_openapi
+app.include_router(router)
+app.openapi = custom_openapi  # type: ignore # conflict between mypy and fastapi
 
 if __name__ == "__main__":
     uvicorn.run(app, host=settings.SERVER_HOST, port=settings.SERVER_PORT)
