@@ -12,7 +12,7 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.11"
 ui = {path="ui", develop=true}
-tag_generator = {path="core", develop=true}
+tag_generator = {path="core/tag_generator", develop=true}
 api = {path="api", develop=true}
 
 
@@ -43,7 +43,7 @@ skips = ["B101", "B601"]
 format = "pylint"
 skip = "*/.tox/*,*/.env/*,.*,.*/*,**/__pycache__/*,**/.venv/*,**/test*/*"
 linters = "pylint,pydocstyle,pycodestyle,mypy"
-ignore = "C0103,C0111,D213,E731,F0401"
+ignore = "C0103,C0111,D203,D213,E731,F0401"
 
 [tool.pylama.linter.pycodestyle]
 max_line_length = 120
@@ -109,7 +109,7 @@ warn_return_any = true
 allow_redefinition = true
 
 # Enable mypy optional plugins, for now enable `pydantic`, sql.
-# plugins = ["pydantic.mypy","sqlmypy"]
+plugins = ["pydantic.mypy"] #,"sqlmypy"
 
 
 [tool.isort]
