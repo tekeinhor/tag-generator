@@ -97,7 +97,12 @@ def remove_pos(x: str, language_model: Language, pos_list: List[str] | None) -> 
     return join_text_row
 
 
-def text_cleaner(x: str, lemmatizer: WordNetLemmatizer, stop_words: List[str], language_model: Language) -> List[str]:
+def text_cleaner(
+    x: str,
+    lemmatizer: WordNetLemmatizer,
+    stop_words: List[str],
+    language_model: Language,
+) -> List[str]:
     """Apply a succession of transformations to text."""
     pos_list = ["NOUN", "PROPN"]
     # Remove POS not in "NOUN", "PROPN"

@@ -1,9 +1,9 @@
 """Pipeline for features creation."""
-from datetime import datetime
-from pathlib import Path
-from typing import List
-from functools import wraps
 import time
+from datetime import datetime
+from functools import wraps
+from pathlib import Path
+from typing import Callable, List, ParamSpec, Tuple, TypeVar
 
 import nltk
 import pandas as pd
@@ -11,8 +11,9 @@ import spacy
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from spacy.language import Language
-from tag_generator.tag_generator.preprocessing import (contains_code, count, detect_extension, detect_lang, extract_tags, filter_tag,
-                                         sanitize, text_cleaner, top_k)
+from tag_generator.preprocessing import count, detect_lang, extract_tags, filter_tag, sanitize, text_cleaner, top_k
+# from tag_generator.tag_generator.preprocessing import (contains_code, count, detect_extension, detect_lang,
+#    extract_tags, filter_tag, sanitize, text_cleaner, top_k)
 from tools.logger import logger
 from tqdm.auto import tqdm
 
@@ -20,19 +21,24 @@ nltk.download("punkt")
 nltk.download("stopwords")
 nltk.download("wordnet")
 
+T = TypeVar("T")
+P = ParamSpec("P")
 
 
-def timeit(func):
-    """Decorator for function time measurement."""
+def timeit(func: Callable[P, T]) -> Callable[P, T]:
+    """Will be used a decorator for function time measurement."""
+
     @wraps(func)
-    def timeit_wrapper(*args, **kwargs):
+    def timeit_wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
         start_time = time.perf_counter()
         result = func(*args, **kwargs)
         end_time = time.perf_counter()
         total_time = end_time - start_time
-        print(f'Function {func.__name__}, Took {total_time:.4f} seconds')
+        print(f"Function {func.__name__}, Took {total_time:.4f} seconds")
         return result
+
     return timeit_wrapper
+
 
 @timeit
 def create_tags_pipe(data_df: pd.DataFrame, first_k: int) -> pd.DataFrame:
@@ -61,9 +67,13 @@ def create_tags_pipe(data_df: pd.DataFrame, first_k: int) -> pd.DataFrame:
 
     return data_df
 
+
 @timeit
 def create_text_pipe(
-    data_df: pd.DataFrame, lemmatizer: WordNetLemmatizer, stop_words: List[str], language_model: Language
+    data_df: pd.DataFrame,
+    lemmatizer: WordNetLemmatizer,
+    stop_words: List[str],
+    language_model: Language,
 ) -> pd.DataFrame:
     """Pipe for clean title and body."""
     tqdm.pandas()
@@ -111,9 +121,14 @@ def create_text_pipe(
 
     return data_df
 
+
 @timeit
 def create_pipe(
-    data_df: pd.DataFrame, first_k: int, lemmatizer: WordNetLemmatizer, stop_words: List[str], language_model: Language
+    data_df: pd.DataFrame,
+    first_k: int,
+    lemmatizer: WordNetLemmatizer,
+    stop_words: List[str],
+    language_model: Language,
 ) -> pd.DataFrame:
     """Pipe to clean all relevant text."""
     tqdm.pandas()
@@ -140,9 +155,13 @@ def create_pipe(
 
 
 def test_sample_data(
-    data_file_path: str, first_k: int, lemmatizer: WordNetLemmatizer, stop_words: List[str], language_model: Language
-) -> [pd.DataFrame, pd.DataFrame]:
-    """Test on sample data."""
+    data_file_path: str,
+    first_k: int,
+    lemmatizer: WordNetLemmatizer,
+    stop_words: List[str],
+    language_model: Language,
+) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    """Used to test on sample data."""
     data_df = pd.read_csv(data_file_path)
     clean_df = create_pipe(data_df, first_k, lemmatizer, stop_words, language_model)
 
@@ -161,8 +180,12 @@ def test_sample_data(
 
 
 def test_input_data(
-    title: str, body: str, lemmatizer: WordNetLemmatizer, stop_words: List[str], language_model: Language
-) -> [pd.DataFrame, pd.DataFrame]:
+    title: str,
+    body: str,
+    lemmatizer: WordNetLemmatizer,
+    stop_words: List[str],
+    language_model: Language,
+) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """Test on example title and body."""
     data_df = pd.DataFrame({"Title": [title], "Body": [body]})
 
@@ -196,7 +219,7 @@ if __name__ == "__main__":
     pattern = [[{"TEXT": {"REGEX": r"^(.+)?\.(py|xml|java)$"}}]]
     attrs = {"POS": "PROPN"}
     # Add rules to the attribute ruler
-    ruler.add(patterns=pattern, attrs=attrs, index=0)
+    ruler.add(patterns=pattern, attrs=attrs, index=0)  # type: ignore # external lib
 
     # clean_df, clean_selected_col_df = test_sample_data(
     #     "/Users/tatia/Developer/tag-generator/core/test_tag_generator/samples.csv",
@@ -219,12 +242,12 @@ if __name__ == "__main__":
     )
 
     today = datetime.now()
-    time = today.strftime("%H%M%S")
+    time_str = today.strftime("%H%M%S")
     prefix = "/Users/tatia/Developer/tag-generator/artifacts"
     output_dir = f"{prefix}/{today.strftime('%Y-%m-%d/%H/data')}"
     Path(output_dir).mkdir(parents=True, exist_ok=True)
 
-    df2.to_csv(f"{output_dir}/{time}_clean_so_questions_2008_2023.csv")
-    df1.to_csv(f"{output_dir}/{time}_clean_all_columns_so_questions_2008_2023.csv")
+    df2.to_csv(f"{output_dir}/{time_str}_clean_so_questions_2008_2023.csv")
+    df1.to_csv(f"{output_dir}/{time_str}_clean_all_columns_so_questions_2008_2023.csv")
 
     logger.info("Final selected col: %s all: %s", df2.shape, df1.shape)
