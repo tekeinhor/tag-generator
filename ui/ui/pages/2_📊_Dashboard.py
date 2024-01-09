@@ -18,7 +18,10 @@ with open(str(config_file), encoding="utf-8") as file:
 
 
 authenticator = stauth.Authenticate(
-    config["credentials"], config["cookie"]["name"], config["cookie"]["key"], config["cookie"]["expiry_days"]
+    config["credentials"],
+    config["cookie"]["name"],
+    config["cookie"]["key"],
+    config["cookie"]["expiry_days"],
 )
 
 authenticator.login("Login", "main")
