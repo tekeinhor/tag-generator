@@ -58,12 +58,7 @@ class ModelArtifacts:
     scikit_model: ScikitModel
     binarizer: MultiLabelBinarizer
     vectorizer: TfidfVectorizer
-    metadata: ModelMetada = {
-        "name": "",
-        "version": 1,
-        "description": "This is my model",
-        "training_data": "",
-    }
+    metadata: ModelMetada
 
 
 class InferenceEngine:
