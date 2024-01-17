@@ -13,6 +13,8 @@ pydantic-settings = "^2.1.0"
 uvicorn = "^0.25.0"
 numpy = "^1.26.3"
 tag_generator = {path="../core/tag_generator", develop=true}
+httpx = "^0.26.0"
+coverage = "^7.4.0"
 
 
 [build-system]

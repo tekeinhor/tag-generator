@@ -3,36 +3,24 @@ from typing import Optional
 
 import joblib
 import numpy.typing as npt
-from tag_generator.inference_pipeline import InferenceEngine, ModelArtifacts
+from tag_generator.inference_pipeline import InferenceEngine, ModelArtifacts, ModelMetada
 from tools.logger import logger
 
 
-class SingletonMeta(type):
-    """A Singleton class using a metaclass."""
 
-    _instances = {}  # type: ignore # Mypy does not and cannot understand arbitrary metaclass code.
-
-    def __call__(cls, *args, **kwargs):  # type: ignore # Mypy does not and cannot understand arbitrary metaclass code.
-        """Perform unicity check when creating a class instance."""
-        if cls not in cls._instances:
-            instance = super().__call__(*args, **kwargs)
-            cls._instances[cls] = instance
-        return cls._instances[cls]
-
-
-class Engine(metaclass=SingletonMeta):
+class Engine():
     """Engine singleton used to perform prediction in the API."""
 
-    def __init__(self, model: Optional[ModelArtifacts]):
+    def __init__(self, artifacts: Optional[ModelArtifacts]):
         """Create the inference engine that will be used for prediction."""
-        if model is None:
+        if artifacts is None:
             raise ValueError("Please provide a valid model artifacts object")
-        self.inference = InferenceEngine(model)
+        self.inference = InferenceEngine(artifacts)
 
     def predict(self, title: str, body: str) -> npt.ArrayLike:
         """Create features and perform prediction given a title and a body."""
         features = self.inference.create_features(title, body)
-        return self.inference.predict(features)
+        return self.inference.predict(features)  # type: ignore # TO DO
 
     @staticmethod
     def load_model_from_s3() -> None:
@@ -51,5 +39,10 @@ class Engine(metaclass=SingletonMeta):
         multi_lr_cv = joblib.load(model_dir_path + "/" + model_name)
         binarizer = joblib.load(model_dir_path + "/" + binarizer_name)
         vectorizer = joblib.load(model_dir_path + "/" + vertorizer_name)
-
-        return ModelArtifacts(multi_lr_cv, binarizer, vectorizer)
+        default_metadata: ModelMetada = {
+        "name": "",
+        "version": 1,
+        "description": "This is my model",
+        "training_data": "",
+    }
+        return ModelArtifacts(multi_lr_cv, binarizer, vectorizer, default_metadata)

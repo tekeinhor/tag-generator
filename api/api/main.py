@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 
-from api.endpoints import lifespan, router
+from api.endpoints import router
 from api.settings import settings
 
 VERSION = "0.0.1"
@@ -27,7 +27,6 @@ def custom_openapi():  # type: ignore # fastapi return a generic type
 
 
 app = FastAPI(
-    lifespan=lifespan,
     title=settings.API_TITLE,
     description=settings.API_DESCRIPTION,
     version=VERSION,

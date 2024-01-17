@@ -14,25 +14,8 @@ from api.service import Engine
 from api.settings import settings
 
 router = APIRouter(prefix=settings.API_PREFIX)
-model = None
-
-
-def get_engine() -> Engine:
-    """Create the Engine singleton that will be injected into the fastAPI app."""
-    return Engine(model)
-
-
-@asynccontextmanager
-async def lifespan(_: FastAPI) -> AsyncGenerator[None, None]:
-    """Handle the different operations done at startup.
-
-    - Loading the model
-    - Setting the Engine
-    """
-    global model  # pylint: disable=W0603, TODO
-    model = Engine.load_model_from_local_fs()
-    yield
-    model = None
+MODEL = Engine.load_model_from_local_fs()
+engine = Engine(MODEL)
 
 
 @router.get(
@@ -51,7 +34,7 @@ def get_health_status() -> JSONResponse:
     description="",
     tags=["ML"],
 )
-def get_models(engine: Engine = Depends(get_engine)) -> ModelMetada:
+def get_models() -> ModelMetada:
     """Return models information."""
     return engine.inference.artifacts.metadata
 
@@ -62,11 +45,11 @@ def get_models(engine: Engine = Depends(get_engine)) -> ModelMetada:
     description="",
     tags=["ML"],
 )
-def predict(request: Request, input_data: PredictionInput, engine: Engine = Depends(get_engine)) -> PredictionOutput:
+def predict(request: Request, input_data: PredictionInput) -> PredictionOutput:
     """Perfom predictions."""
     logger.info("Call %s", request.url)
     predictions = engine.predict(input_data.title, input_data.body)
     output = PredictionOutput(
-        ml_model_metadata=engine.inference.model.metadata, tags=list(predictions[0])  # type: ignore # TO DO
+        ml_model_metadata=engine.inference.artifacts.metadata, tags=list(predictions[0])  # type: ignore # TO DO
     )
     return output
