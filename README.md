@@ -1,11 +1,11 @@
 # tag-generator
+[![Build](https://github.com/tekeinhor/tag-generator/actions/workflows/build.yaml/badge.svg)](https://github.com/tekeinhor/tag-generator/actions/workflows/build.yaml)
 
 A simple tag-generator project to showcase MLOps principles.
-- Feature store
-- Model Regsitry
-- Model Deployment
-- Infrastructure as Code
-- Monitoring
+- Core feature (when the traininf and the inference is done)
+- An API, to perform the predictions
+- a streamlit UI to showcase everything
+- Infrastructure as Code to create the different AWS resources
 
 
 ## installing the project
