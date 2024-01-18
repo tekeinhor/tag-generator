@@ -3,14 +3,13 @@ from typing import Optional
 
 import joblib
 import numpy.typing as npt
-from tools.logger import logger
 from tag_generator.inference_pipeline import InferenceEngine, ModelArtifacts, ModelMetada
+from tools.logger import logger
+
 from api.settings import settings
 
 
-
-
-class Engine():
+class Engine:
     """Engine singleton used to perform prediction in the API."""
 
     def __init__(self, artifacts: Optional[ModelArtifacts]):
@@ -42,9 +41,9 @@ class Engine():
         binarizer = joblib.load(model_dir_path + "/" + binarizer_name)
         vectorizer = joblib.load(model_dir_path + "/" + vertorizer_name)
         default_metadata: ModelMetada = {
-        "name": "",
-        "version": 1,
-        "description": "This is my model",
-        "training_data": "",
-    }
+            "name": "",
+            "version": 1,
+            "description": "This is my model",
+            "training_data": "",
+        }
         return ModelArtifacts(multi_lr_cv, binarizer, vectorizer, default_metadata)

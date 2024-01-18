@@ -1,9 +1,7 @@
 """Define all the endpoints of the API."""
-from collections.abc import AsyncGenerator
-from contextlib import asynccontextmanager
 from http import HTTPStatus
 
-from fastapi import APIRouter, Depends, FastAPI
+from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from starlette.requests import Request
 from tag_generator.inference_pipeline import ModelMetada
