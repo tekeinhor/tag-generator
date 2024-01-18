@@ -124,7 +124,17 @@ if __name__ == "__main__":
     binarizer = joblib.load(model_dir_path + "/" + binarizer_name)
     vectorizer = joblib.load(model_dir_path + "/" + vertorizer_name)
 
-    my_model = ModelArtifacts(scikit_model=multi_lr_cv, binarizer=binarizer, vectorizer=vectorizer)
+    my_model = ModelArtifacts(
+        scikit_model=multi_lr_cv,
+        binarizer=binarizer,
+        vectorizer=vectorizer,
+        metadata={
+            "name": "Multi-LR model",
+            "version": 1,
+            "description": "Simple One-vs-All Model",
+            "training_data": "2024-01-02, 19:31:20",
+        },
+    )
     engine = InferenceEngine(my_model)
 
     features = engine.create_features(
