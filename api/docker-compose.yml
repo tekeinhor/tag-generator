@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BUILD_PATH: /app
+    volumes:
+      - ../core/models/2024-01-02/19/:/app/models
+    ports:
+      - "8080:8080"
+    environment:
+      LOCAL_MODEL_PATH_DIR: /app/models
+      NLTK_DATA: /app/nltk_data
+

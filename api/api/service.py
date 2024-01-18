@@ -3,8 +3,10 @@ from typing import Optional
 
 import joblib
 import numpy.typing as npt
-from tag_generator.inference_pipeline import InferenceEngine, ModelArtifacts, ModelMetada
 from tools.logger import logger
+from tag_generator.inference_pipeline import InferenceEngine, ModelArtifacts, ModelMetada
+from api.settings import settings
+
 
 
 
@@ -30,7 +32,7 @@ class Engine():
     def load_model_from_local_fs() -> ModelArtifacts:
         """Load the model from the local file system."""
         logger.info("Starting loading the model...")
-        model_dir_path = "/Users/tatia/Developer/tag-generator/core/models/2024-01-02/19"
+        model_dir_path = settings.LOCAL_MODEL_PATH_DIR
         model_name = "193120_final_so_questions_2008_2023_multi_lr_nlp_model.pkl"
         binarizer_name = "193120_final_so_questions_2008_2023_multilabel_binarizer.pkl"
         vertorizer_name = "193120_final_so_questions_2008_2023_tfidf_vectorizer.pkl"

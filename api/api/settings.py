@@ -18,5 +18,8 @@ class APISettings(BaseSettings):  # type: ignore # conflict between pydantic and
     API_SUMMARY: str = "Tag Generator API"
     API_DESCRIPTION: str = "Tag generator for stackoverflow questions using a multiclass model for predictions."
 
+    # MODEL
+    LOCAL_MODEL_PATH_DIR: str = "/Users/tatia/Developer/tag-generator/core/models/2024-01-02/19"
+
 
 settings = APISettings()
