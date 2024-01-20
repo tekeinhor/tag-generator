@@ -22,7 +22,14 @@ jobs:
           pip install poetry=="1.7.1"
           poetry install -vvv --no-cache
           source $(poetry env info --path)/bin/activate
-          poetry run lint
       - name: Lint in libs/tools
         run: poetry run lint
+      - name: Running tests with
+        run: |
+          coverage run -m pytest
+      - name: Create report and badge
+        run: |
+          coverage xml
+          pip install genbadge"[all]"
+          genbadge coverage -i coverage.xml 
       - run: echo "🍏 This job's status is ${{ job.status }}."
