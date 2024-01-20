@@ -20,7 +20,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install poetry=="1.7.1"
           poetry install -vvv --no-cache
-          poetry shell
+        # it is not possible to use `poetry shell`in an non-interactive env (https://github.com/orgs/python-poetry/discussions/3526)
+          source $(poetry env info --path)/bin/activate
           poetry run lint
       - name: Lint in libs/tools
         run: poetry run lint
