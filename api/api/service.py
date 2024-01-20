@@ -1,12 +1,17 @@
 """API Engine definition."""
+from pathlib import Path
 from typing import Optional
 
 import joblib
 import numpy.typing as npt
 from tag_generator.inference_pipeline import InferenceEngine, ModelArtifacts, ModelMetada
-from tools.logger import logger
+from tools.logger import set_logger
 
 from api.settings import settings
+
+current_file = Path(__file__)
+dirname = current_file.parent.stem
+logger = set_logger(dirname)
 
 
 class Engine:
@@ -21,7 +26,7 @@ class Engine:
     def predict(self, title: str, body: str) -> npt.ArrayLike:
         """Create features and perform prediction given a title and a body."""
         features = self.inference.create_features(title, body)
-        return self.inference.predict(features)  # type: ignore # TO DO
+        return self.inference.predict(features)
 
     @staticmethod
     def load_model_from_s3() -> None:

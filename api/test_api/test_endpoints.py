@@ -5,6 +5,7 @@ import pytest
 from fastapi.testclient import TestClient
 from tag_generator.inference_pipeline import ModelArtifacts
 
+from api.endpoints import get_engine
 from api.main import app
 from api.service import Engine
 from api.settings import settings
@@ -26,11 +27,10 @@ def test_endpoint_get_health_status(client: TestClient):
     assert "Service healthy!" in actual
 
 
-@patch("api.endpoints.MODEL")
-def test_endpoint_get_model(mocked_artifacts, client: TestClient, default_mocked_artifacts):
+def test_endpoint_get_model(client: TestClient, default_mocked_engine):
     """Test the get_model endpoint."""
-    mocked_artifacts.return_value = default_mocked_artifacts
 
+    app.dependency_overrides[get_engine] = lambda: default_mocked_engine
     result = client.get(f"{settings.API_PREFIX}/models")
     result_json = result.json()
 
@@ -45,12 +45,9 @@ def test_endpoint_get_model(mocked_artifacts, client: TestClient, default_mocked
     "data",
     [({})],
 )
-@patch("api.endpoints.MODEL")
-def test_endpoint_predict_invalid_input(
-    mocked_artifacts: ModelArtifacts, client: TestClient, data: dict, default_mocked_artifacts
-):
+def test_endpoint_predict_invalid_input(client: TestClient, data: dict, default_mocked_engine):
     """Test the prediction endpoint."""
-    mocked_artifacts.return_value = default_mocked_artifacts
+    app.dependency_overrides[get_engine] = lambda: default_mocked_engine
 
     result = client.post(f"{settings.API_PREFIX}/predict", json=data, headers={"content-type": "application/json"})
     result_json = result.json()
@@ -60,11 +57,12 @@ def test_endpoint_predict_invalid_input(
     assert result_json["detail"][0]["msg"] == "Field required"
 
 
-@patch("api.endpoints.MODEL")
-@patch.object(Engine, "predict", return_value=[("dictionary", "python")], scope="function")
-def test_endpoint_predict(mocked_engine_predict, mocked_artifacts, client: TestClient, local_mocked_artifacts):
+@patch.object(Engine, "predict", scope="function")
+def test_endpoint_predict(mocked_engine_predict, client: TestClient, default_mocked_engine):
     """Test the prediction endpoint."""
-    mocked_artifacts.return_value = local_mocked_artifacts
+
+    mocked_engine_predict.return_value = [("dictionary", "python")]
+    app.dependency_overrides[get_engine] = lambda: default_mocked_engine
     data = {
         "title": "update nested dictionary in python",
         "body": '<p>I\'ve below dictionary</p># <pre class="lang-py s-code-block"><code class="hljs language-python">artistVrbl= <span lass="hljs-string">\'jon\'</span># songVrbl = <span class="hljs-string">\'sunshine\'</span># dct = {<span class="hljs-string">"Artist"</span>: {<span class="hljs-string">"S"</span>:# <span class="hljs-string">"artistVrbl"</span>},# <span class="hljs-string">"SongTitle"</span>:# {<span class="hljs-string">"S"</span>:<span class="hljs-string">"songVrbl"</span>}}</code></pre># <p>Not able to figure out to update variables value in above dictionary.</p># <p>expected output</p># <pre class="lang-py s-code-block"><code class="hljs language-python">dct = {<span class="hljs-string">"Artist"</pan>:# {<span class="hljs-string">"S"</span>: <span class="hljs-string">"jon"</span>},# <span class="hljs-string">"SongTitle"</span>:# {<span class="hljs-string">"S"</span>: <span class="hljs-string">"sunshine"</span>}}# </code></pre> <p>Can anyone please suggest ?</p>',

@@ -27,3 +27,19 @@ def default_mocked_artifacts() -> ModelArtifacts:
 @pytest.fixture
 def local_mocked_artifacts() -> ModelArtifacts:
     return Engine.load_model_from_local_fs()
+
+
+@pytest.fixture
+def default_mocked_engine() -> Engine:
+    model = ModelArtifacts(
+        None,
+        None,
+        None,
+        {
+            "name": "",
+            "version": 1,
+            "description": "This is my model",
+            "training_data": "",
+        },
+    )
+    return Engine(model)

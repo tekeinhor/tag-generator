@@ -1,19 +1,30 @@
 """Define all the endpoints of the API."""
+from functools import lru_cache
 from http import HTTPStatus
+from pathlib import Path
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from starlette.requests import Request
 from tag_generator.inference_pipeline import ModelMetada
-from tools.logger import logger
+from tools.logger import set_logger
 
 from api.request_schemas import PredictionInput, PredictionOutput
 from api.service import Engine
 from api.settings import settings
 
+current_file = Path(__file__)
+dirname = current_file.parent.stem
+logger = set_logger(dirname)
+
 router = APIRouter(prefix=settings.API_PREFIX)
-MODEL = Engine.load_model_from_local_fs()
-engine = Engine(MODEL)
+
+
+@lru_cache
+def get_engine() -> Engine:
+    """Create the Engine using lru_cache in order to not reinvoque at every router call."""
+    model_artifacts = Engine.load_model_from_local_fs()
+    return Engine(model_artifacts)
 
 
 @router.get(
@@ -32,7 +43,7 @@ def get_health_status() -> JSONResponse:
     description="",
     tags=["ML"],
 )
-def get_models() -> ModelMetada:
+def get_models(engine: Engine = Depends(get_engine)) -> ModelMetada:
     """Return models information."""
     return engine.inference.artifacts.metadata
 
@@ -43,7 +54,7 @@ def get_models() -> ModelMetada:
     description="",
     tags=["ML"],
 )
-def predict(request: Request, input_data: PredictionInput) -> PredictionOutput:
+def predict(request: Request, input_data: PredictionInput, engine: Engine = Depends(get_engine)) -> PredictionOutput:
     """Perfom predictions."""
     logger.info("Call %s", request.url)
     predictions = engine.predict(input_data.title, input_data.body)

@@ -1,5 +1,6 @@
 """Pipeline for performing prediction."""
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Protocol
 
 import joblib
@@ -11,8 +12,12 @@ from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import MultiLabelBinarizer
 from tag_generator.feature_pipeline import create_text_pipe
-from tools.logger import logger
+from tools.logger import set_logger
 from typing_extensions import TypedDict
+
+current_file = Path(__file__)
+dirname = current_file.parent.stem
+logger = set_logger(dirname)
 
 
 class ModelMetada(TypedDict):  # pylint:disable=too-many-ancestors, TO DO

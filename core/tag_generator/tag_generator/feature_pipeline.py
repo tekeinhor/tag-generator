@@ -13,9 +13,12 @@ from nltk.stem import WordNetLemmatizer
 from spacy.language import Language
 from tag_generator.preprocessing import count, detect_lang, extract_tags, filter_tag, sanitize, text_cleaner, top_k
 from tag_generator.settings import settings
-from tools.logger import logger
+from tools.logger import set_logger
 from tqdm.auto import tqdm
 
+current_file = Path(__file__)
+dirname = current_file.parent.stem
+logger = set_logger(dirname)
 logger.info("NLTK DIR: %s", settings.NLTK_DATA_DIR)
 nltk.download("punkt", download_dir=settings.NLTK_DATA_DIR)
 nltk.download("stopwords", download_dir=settings.NLTK_DATA_DIR)
