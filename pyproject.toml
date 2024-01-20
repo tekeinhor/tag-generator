@@ -15,6 +15,7 @@ ui = {path="ui", develop=true}
 tag_generator = {path="core/tag_generator", develop=true}
 api = {path="api", develop=true}
 python-semantic-release = "^8.7.0"
+coverage = "^7.4.0"
 
 
 [tool.poetry.group.test.dependencies]
