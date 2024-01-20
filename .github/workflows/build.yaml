@@ -27,6 +27,7 @@ jobs:
       - name: Running tests with
         run: |
           python -m pip install coverage
+          python -m pip install pytest
           coverage run -m pytest
       - name: Create report and badge
         run: |
