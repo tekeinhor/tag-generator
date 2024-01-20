@@ -22,15 +22,18 @@ jobs:
           pip install poetry=="1.7.1"
           poetry install -vvv --no-cache
           source $(poetry env info --path)/bin/activate
+          coverage run -m pytest
       - name: Lint in libs/tools
-        run: poetry run lint
+        run: |
+          source $(poetry env info --path)/bin/activate
+          poetry run lint
       - name: Running tests with
         run: |
-          python -m pip install coverage
-          python -m pip install pytest
+          source $(poetry env info --path)/bin/activate
           coverage run -m pytest
       - name: Create report and badge
         run: |
+          source $(poetry env info --path)/bin/activate
           coverage xml
           pip install genbadge"[all]"
           genbadge coverage -i coverage.xml 
