@@ -3,7 +3,7 @@ import logging
 from logging import Logger
 
 
-def set_logger(name: str = "tag_generator") -> Logger:
+def set_logger(name: str) -> Logger:
     """Set up logger."""
     # create logger
     log = logging.getLogger(name)
@@ -19,6 +19,3 @@ def set_logger(name: str = "tag_generator") -> Logger:
     console_handler.setFormatter(formatter)
     log.addHandler(console_handler)
     return log
-
-
-logger = set_logger()
