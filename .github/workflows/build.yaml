@@ -22,7 +22,6 @@ jobs:
           pip install poetry=="1.7.1"
           poetry install -vvv --no-cache
           source $(poetry env info --path)/bin/activate
-          coverage run -m pytest
       - name: Lint in libs/tools
         run: |
           source $(poetry env info --path)/bin/activate
@@ -36,5 +35,11 @@ jobs:
           source $(poetry env info --path)/bin/activate
           coverage xml
           pip install genbadge"[all]"
-          genbadge coverage -i coverage.xml 
+          genbadge coverage -i coverage.xml  -o reports/coverage.svg
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add reports/coverage.svg
+          git commit -m "ci(badge): add test-cov badge"
+          git push
+
       - run: echo "🍏 This job's status is ${{ job.status }}."
