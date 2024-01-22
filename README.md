@@ -1,6 +1,5 @@
 # tag-generator
 [![build](https://github.com/tekeinhor/tag-generator/actions/workflows/build.yaml/badge.svg)](https://github.com/tekeinhor/tag-generator/actions/workflows/build.yaml)
-
 ![coverage](./reports/coverage.svg?dummy=8484744)
 
 A simple tag-generator project to showcase MLOps principles.

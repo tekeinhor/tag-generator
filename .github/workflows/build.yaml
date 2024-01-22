@@ -35,11 +35,12 @@ jobs:
           source $(poetry env info --path)/bin/activate
           coverage xml
           pip install genbadge"[all]"
-          genbadge coverage -i coverage.xml  -o reports/coverage.svg
+          COVERAGE_SVG=reports/coverage.svg
+          genbadge coverage -i coverage.xml  -o $COVERAGE_SVG
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add reports/coverage.svg
-          git commit -m "ci(badge): add test-cov badge"
+          git add $COVERAGE_SVG
+          git diff --quiet $COVERAGE_SVG && git diff --staged --quiet $COVERAGE_SVG || git commit -m "ci(badge): add/update test-cov badge"
           git push
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
