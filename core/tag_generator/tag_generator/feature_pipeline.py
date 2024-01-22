@@ -46,6 +46,7 @@ def timeit(func: Callable[P, T]) -> Callable[P, T]:
 @timeit
 def create_tags_pipe(data_df: pd.DataFrame, first_k: int) -> pd.DataFrame:
     """Pipe for clean tags."""
+    tqdm.pandas()
     data_df = data_df[data_df["Tags"].notna()]
     logger.info("Removed line where 'Tags' is Nan %s", data_df.shape)
 
@@ -58,15 +59,14 @@ def create_tags_pipe(data_df: pd.DataFrame, first_k: int) -> pd.DataFrame:
 
     print(tags)
     data_df = data_df.drop(data_df[data_df.Tags_count == 0].index).reset_index()
-    logger.info("Dropping rows where there are no Tags: %s", data_df.shape)
+    logger.info("Dropped rows where there are no Tags: %s", data_df.shape)
 
     logger.info("Dropping rows where there are no tags between top tags...")
-
     top_tags = list(tags.Tags_list.iloc[0:first_k])
     data_df["top_tags"] = data_df["Tags_list"].apply(lambda x: filter_tag(x, top_tags))
     data_df["top_tags_count"] = data_df["top_tags"].progress_apply(count)
     data_df = data_df[data_df.top_tags_count > 0]
-    logger.info("Dropped rows where there are no Tags: %s", data_df.shape)
+    logger.info("Dropped rows where there are no tags between top tags: %s", data_df.shape)
 
     return data_df
 
@@ -83,12 +83,6 @@ def create_text_pipe(
     logger.info("Dropping rows where there are no Bodys...")
     data_df = data_df[data_df["Body"].notna()]
     logger.info("Dropped rows where there are no Bodys: %s", data_df.shape)
-
-    # logger.info("Checking file extension...")
-    # data_df[:,"has_ext"] = data_df["Body"].progress_apply(detect_extension)
-    # data_df["contains_code"] = data_df["Body"].progress_apply(contains_code)
-    # data_df[:,"contains_code"] = data_df["contains_code"].astype(int)
-    # logger.info("Checked")
 
     logger.info("Detecting lang...")
     data_df["body_without_tags"] = data_df["Body"].progress_apply(sanitize)
@@ -168,11 +162,10 @@ def test_sample_data(
     data_df = pd.read_csv(data_file_path)
     clean_df = create_pipe(data_df, first_k, lemmatizer, stop_words, language_model)
 
-    selected_col = ["clean_title", "clean_body", "Score", "contains_code", "Tags_list"]
+    selected_col = ["clean_title", "clean_body", "Score", "Tags_list"]
     col_new_names = {
         "clean_title": "Title",
         "clean_body": "Body",
-        "contains_code": "Contains_Code",
         "top_tags": "Tags",
     }
 
@@ -194,11 +187,10 @@ def test_input_data(
 
     clean_df = create_text_pipe(data_df, lemmatizer, stop_words, language_model)
 
-    selected_col = ["clean_title", "clean_body", "contains_code"]
+    selected_col = ["clean_title", "clean_body"]
     col_new_names = {
         "clean_title": "Title",
         "clean_body": "Body",
-        "contains_code": "Contains_Code",
     }
 
     clean_selected_col_df = clean_df[selected_col]

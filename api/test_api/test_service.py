@@ -1,4 +1,4 @@
-from unittest.mock import Mock, call, patch
+from unittest.mock import Mock, patch
 
 import pytest
 from tag_generator.inference_pipeline import InferenceEngine, ModelArtifacts

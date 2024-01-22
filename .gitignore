@@ -1,3 +1,5 @@
 artifacts/*
 core/data/*
 core/models/*
+.coverage
+coverage.xml

@@ -21,11 +21,13 @@ fmt_cmd = {
     "isort": {"command": ["isort"]},
 }
 
+CONFIG_FILE = "pyproject.toml"
 
-def read_config() -> str:
+
+def read_config(file_name: str) -> str:
     """Read pyproject in current directory and return the project name."""
     try:
-        with open("pyproject.toml", "rb") as f:
+        with open(file_name, "rb") as f:
             data = tomllib.load(f)
         return data["tool"]["poetry"]["name"]  # type: ignore #toml.load returns a too generic type
     except FileNotFoundError:
@@ -36,12 +38,13 @@ def read_config() -> str:
 def run_command(kwargs: Dict[str, Dict[str, List[str]]], project_name: str = "") -> None:
     """Run specified commands kwargs with subprocess."""
     if not project_name:
-        project_name = read_config()
+        project_name = read_config(CONFIG_FILE)
 
     for name, command in kwargs.items():
         spinner = Halo(text=f">> Running `{name}`... ", spinner="arc", placement="left")
         spinner.start()
         result = subprocess.run(args=command["command"] + [project_name], check=False)
+        print("====>", result)
         status = result.returncode
         if status == 0:
             spinner.succeed(f"End: {name}")

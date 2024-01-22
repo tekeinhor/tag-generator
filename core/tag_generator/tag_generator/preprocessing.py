@@ -1,14 +1,19 @@
 """Contains all preprocessing functions."""
 import re
 from collections.abc import Sized
+from pathlib import Path
 from typing import List
 
 import nltk
 from langdetect import detect
-from lxml.html import fromstring
 from lxml.html.clean import Cleaner  # pylint: disable=no-name-in-module
 from nltk.stem import WordNetLemmatizer
 from spacy.language import Language
+from tools.logger import set_logger
+
+current_file = Path(__file__)
+dirname = current_file.parent.stem
+logger = set_logger(dirname)
 
 
 def count(x: Sized) -> int:
@@ -31,10 +36,9 @@ def extract_tags(txt: str) -> List[str]:
 
     try:
         return p.findall(txt)
-    except TypeError as _:
-        print(txt)
-        print(p)
-        raise _
+    except TypeError as type_error:
+        logger.error("Following text: %s has:\n%s", txt, p)
+        raise type_error
 
 
 def detect_extension(text: str) -> bool:
@@ -64,7 +68,7 @@ def sanitize(text: str) -> str:
         return ""
     html_str = re.sub(r"^<div>", "", html_str)
     html_str = re.sub(r"</div>$", "", html_str)
-    return html_str  # type: ignore # (re pack ill-typed)
+    return html_str.strip()  # type: ignore # (re pack ill-typed)
 
 
 def detect_lang(x: str) -> str:
@@ -73,14 +77,6 @@ def detect_lang(x: str) -> str:
         return detect(x)  # type: ignore # generic return from external lib
     except Exception:  # pylint: disable=broad-exception-caught, TODO
         return ""
-
-
-def contains_code(text: str) -> bool:
-    """Return True if it finds a <code> or <pre> tags, False otherwise."""
-    html = fromstring(text)
-    has_code = html.find(".//code") is not None
-    has_pre = html.find(".//pre") is not None
-    return has_pre or has_code
 
 
 def remove_pos(x: str, language_model: Language, pos_list: List[str] | None) -> str:
