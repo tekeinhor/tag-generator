@@ -1,21 +1,21 @@
 name: "Terraform action"
 on:
-	push:
-	  branches:
-	    - main
+  push:
+    branches:
+      - main
     paths:
       - "iac/terraform/**"
-	pull_request:
+  pull_request:
 permissions:
-	id-token: write # This is required for aws oidc connection
-	contents: read # This is required for actions/checkout
-	pull-requests: write # This is required for gh bot to comment PR
+  id-token: write # This is required for aws oidc connection
+  contents: read # This is required for actions/checkout
+  pull-requests: write # This is required for gh bot to comment PR
 env:
-	TF_LOG: INFO
-	AWS_REGION: ${{ secrets.AWS_REGION }}
-	TF_VERSION: 1.7.0
+  TF_LOG: INFO
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  TF_VERSION: 1.7.0
 jobs:
-	deploy:
+  deploy:
     runs-on: ubuntu-latest
     defaults:
       run:
