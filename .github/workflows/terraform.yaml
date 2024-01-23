@@ -5,7 +5,7 @@ on:
       - main
     paths:
       - "iac/terraform/**"
-  pull_request:
+  workflow_dispatch:
 permissions:
   id-token: write # This is required for aws oidc connection
   contents: read # This is required for actions/checkout
@@ -20,7 +20,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: .
+        working-directory: ./iac/terraform
     steps:
       - name: Git checkout
         uses: actions/checkout@v3
