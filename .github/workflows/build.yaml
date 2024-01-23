@@ -1,6 +1,11 @@
 name: build
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+on:
+	push:
+	  branches:
+	    - main
+    paths-ignore:
+      - iac/terraform/**
 jobs:
   build:
     runs-on: ubuntu-latest
