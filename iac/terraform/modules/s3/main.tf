@@ -7,18 +7,13 @@
 provider "aws" {
   region = var.region
 
-    assume_role {
-      role_arn = "arn:aws:iam::637423196893:role/TerraformAdminAccessRole"
-      session_name = var.session_name
-    }
-
   default_tags {
     tags = var.tags
   }
 }
 
 resource "aws_s3_bucket" "example" {
-  bucket = var.bucket_name
+  bucket        = var.bucket_name
   force_destroy = false
 }
 
