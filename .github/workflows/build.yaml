@@ -6,6 +6,7 @@ on:
       - main
     paths-ignore:
       - "iac/terraform/**"
+      - ".github/workflows/terraform.yaml"
 jobs:
   build:
     runs-on: ubuntu-latest

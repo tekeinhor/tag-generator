@@ -20,7 +20,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./iac/terraform
+        working-directory: ./iac/terraform/dev
     steps:
       - name: Git checkout
         uses: actions/checkout@v3
@@ -79,13 +79,7 @@ jobs:
             </details>
             
             *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
-            
-            github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: output
-            }) 
+
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
         run: exit 1
