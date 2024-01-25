@@ -4,14 +4,6 @@
 
 # Description: create aws_s3_bucket, aws_s3_bucket_ownership_control and aws_s3_bucket_public_access_block resources.
 
-provider "aws" {
-  region = var.region
-
-  default_tags {
-    tags = var.tags
-  }
-}
-
 resource "aws_s3_bucket" "example" {
   bucket        = var.bucket_name
   force_destroy = false

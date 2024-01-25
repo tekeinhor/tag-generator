@@ -22,6 +22,7 @@ jobs:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
   deploy-global:
+    needs: deploy-dev
     uses: ./.github/workflows/deploy-template.yaml
     with:
       deploy-dir: "./iac/terraform/global"
@@ -30,7 +31,7 @@ jobs:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
   # deploy-prod:
-  #   needs: deploy-dev
+  #   needs: [deploy-dev, deploy-global]
   #   uses: ./.github/workflows/deploy-template.yaml
   #   with:
   #     deploy-dir: "./iac/terraform/prod"

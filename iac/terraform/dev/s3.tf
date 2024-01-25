@@ -1,10 +1,16 @@
+provider "aws" {
+  region = local.region
+
+  default_tags {
+    tags = local.tags
+  }
+}
+
+
+
 module "s3_bucket_dev" {
   source = "../modules/s3"
 
-  bucket_name = "tek-tag-generator-dev"
-  region      = local.region
-
-  tags = local.tags
-
+  bucket_name  = "tek-tag-generator-dev"
   session_name = "tek-s3-dev"
 }
