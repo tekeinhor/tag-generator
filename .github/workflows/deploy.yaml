@@ -1,0 +1,40 @@
+name: "Terraform action"
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "iac/terraform/**"
+
+permissions:
+  id-token: write # This is required for aws oidc connection
+  contents: read # This is required for actions/checkout
+  pull-requests: write # This is required for gh bot to comment PR
+
+jobs:
+  deploy-global:
+    uses: ./.github/workflows/template.deploy.yaml
+    with:
+      deploy-dir: "./iac/terraform"
+      terraform-version: 1.7.0
+    secrets:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+  deploy-dev:
+    uses: ./.github/workflows/template.deploy.yaml
+    with:
+      deploy-dir: "./iac/terraform/dev"
+      terraform-version: 1.7.0
+    secrets:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+  deploy-prod:
+    needs: deploy-dev
+    uses: ./.github/workflows/template.deploy.yaml
+    with:
+      deploy-dir: "./iac/terraform/prod"
+      terraform-version: 1.7.0
+    secrets:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
