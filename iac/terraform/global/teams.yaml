@@ -1,0 +1,11 @@
+teams:
+  Ops:
+    members:
+      - email: tatiana.ekeinhor@gmail.com
+        name: Tatiana Ekeinhor
+    admin: true
+  Front:
+    members:
+      - email: christophe.massolin@gmail.com
+        name: Christophe Massolin
+    admin: false

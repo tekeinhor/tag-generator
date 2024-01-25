@@ -16,7 +16,7 @@ jobs:
   deploy-global:
     uses: ./.github/workflows/template.deploy.yaml
     with:
-      deploy-dir: "./iac/terraform"
+      deploy-dir: "./iac/terraform/global"
       terraform-version: 1.7.0
     secrets:
       AWS_REGION: ${{ secrets.AWS_REGION }}
