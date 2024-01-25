@@ -40,7 +40,8 @@ resource "aws_identitystore_user" "this" {
   }
 
   emails {
-    value = each.key
+    primary = true
+    value   = each.key
   }
 }
 
@@ -50,6 +51,8 @@ resource "aws_identitystore_group" "group" {
   description       = "Group for ${each.key}"
   identity_store_id = tolist(data.aws_ssoadmin_instances.this.identity_store_ids)[0]
 }
+
+
 
 # Create permissions and policy to attach to permissions
 

@@ -16,4 +16,5 @@ terraform {
     key            = "tag-generator-stack-tf/dev/terraform.tfstate"
     dynamodb_table = "tek-tf-state-storage-lock"
   }
+
 }
