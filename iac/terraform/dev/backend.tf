@@ -13,7 +13,7 @@ terraform {
     encrypt        = true
     bucket         = "tek-tf-state-storage"
     region         = "eu-west-3"
-    key            = "tag-generator-stack-tf/dev/terraform.tfstate"
+    key            = "tag-generator-stack-tf/global/terraform.tfstate"
     dynamodb_table = "tek-tf-state-storage-lock"
   }
 }
