@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   deploy-dev:
-    uses: ./.github/workflows/template.deploy.yaml
+    uses: ./.github/workflows/deploy-template.yaml
     with:
       deploy-dir: "./iac/terraform/dev"
       terraform-version: "1.7.0"
@@ -22,7 +22,7 @@ jobs:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
   deploy-global:
-    uses: ./.github/workflows/template.deploy.yaml
+    uses: ./.github/workflows/deploy-template.yaml
     with:
       deploy-dir: "./iac/terraform/global"
       terraform-version: "1.7.0"
@@ -31,7 +31,7 @@ jobs:
       AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
   # deploy-prod:
   #   needs: deploy-dev
-  #   uses: ./.github/workflows/template.deploy.yaml
+  #   uses: ./.github/workflows/deploy-template.yaml
   #   with:
   #     deploy-dir: "./iac/terraform/prod"
   #     terraform-version: "1.7.0"
