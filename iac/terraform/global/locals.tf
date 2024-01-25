@@ -2,7 +2,7 @@ locals {
   region          = "eu-west-3"
   owner           = "Tatia"
   account_id      = "637423196893"
-  environment     = terraform.workspace
+  environment     = "prod"
   managed_by      = "terraform"
   resource_origin = "https://github.com/tekeinhor/tag-generator"
 

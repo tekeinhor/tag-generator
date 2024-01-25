@@ -1,4 +1,4 @@
-name: "Terraform action"
+name: deploy
 on:
   workflow_dispatch:
   push:
@@ -13,14 +13,6 @@ permissions:
   pull-requests: write # This is required for gh bot to comment PR
 
 jobs:
-  deploy-global:
-    uses: ./.github/workflows/template.deploy.yaml
-    with:
-      deploy-dir: "./iac/terraform/global"
-      terraform-version: "1.7.0"
-    secrets:
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
   deploy-dev:
     uses: ./.github/workflows/template.deploy.yaml
     with:
@@ -29,12 +21,20 @@ jobs:
     secrets:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
-  deploy-prod:
-    needs: deploy-dev
+  deploy-global:
     uses: ./.github/workflows/template.deploy.yaml
     with:
-      deploy-dir: "./iac/terraform/prod"
+      deploy-dir: "./iac/terraform/global"
       terraform-version: "1.7.0"
     secrets:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+  # deploy-prod:
+  #   needs: deploy-dev
+  #   uses: ./.github/workflows/template.deploy.yaml
+  #   with:
+  #     deploy-dir: "./iac/terraform/prod"
+  #     terraform-version: "1.7.0"
+  #   secrets:
+  #     AWS_REGION: ${{ secrets.AWS_REGION }}
+  #     AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
