@@ -7,18 +7,17 @@ locals {
     for project in local.projects : project.members
   ])
 
-  m = {
-    for index, member in local.all_members :
-    member.email => member.name
-  }
+  # m = {
+  #   for index, member in local.all_members :
+  #   member.email => member.name
+  # }
 
-  admin = {
-    for name, project in local.projects :
-    name => "${project.admin? "a" : "b"}"
-    # name => "${project.admin? aws_ssoadmin_permission_set.admin : (aws_ssoadmin_permission_set.read_only)}"
-  }
+  # admin = {
+  #   for name, project in local.projects :
+  #   name => project.admin ? "a" : "b"
+  # }
 
-  ops_members = coalesce(local.projects.Ops.members, [])
+  # ops_members = coalesce(local.projects.Ops.members, [])
   # x = toset([for member in local.ops_members: member.email])
 }
 
@@ -49,7 +48,7 @@ resource "aws_identitystore_group" "group" {
   for_each          = local.projects
   display_name      = each.key
   description       = "Group for ${each.key}"
-  identity_store_id = tolist(data.aws_ssoadmin_instances.example.identity_store_ids)[0]
+  identity_store_id = tolist(data.aws_ssoadmin_instances.this.identity_store_ids)[0]
 }
 
 # Create permissions and policy to attach to permissions
@@ -85,7 +84,7 @@ resource "aws_ssoadmin_managed_policy_attachment" "admin" {
 resource "aws_ssoadmin_account_assignment" "assignment" {
   for_each = {
     for name, project in local.projects :
-    name => "${project.admin? aws_ssoadmin_permission_set.admin : aws_ssoadmin_permission_set.read_only}"
+    name => project.admin ? aws_ssoadmin_permission_set.admin : aws_ssoadmin_permission_set.read_only
   }
   instance_arn       = each.value.instance_arn
   permission_set_arn = each.value.arn
