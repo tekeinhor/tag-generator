@@ -15,10 +15,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-      defaults:
-        run:
-          shell: bash
-          working-directory: ${{ inputs.deploy-dir }}
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ inputs.deploy-dir }}
       steps:
         - name: Git checkout
           uses: actions/checkout@v4
