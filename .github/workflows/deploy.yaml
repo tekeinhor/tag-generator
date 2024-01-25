@@ -17,7 +17,7 @@ jobs:
     uses: ./.github/workflows/template.deploy.yaml
     with:
       deploy-dir: "./iac/terraform/global"
-      terraform-version: 1.7.0
+      terraform-version: "1.7.0"
     secrets:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
@@ -25,7 +25,7 @@ jobs:
     uses: ./.github/workflows/template.deploy.yaml
     with:
       deploy-dir: "./iac/terraform/dev"
-      terraform-version: 1.7.0
+      terraform-version: "1.7.0"
     secrets:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
@@ -34,7 +34,7 @@ jobs:
     uses: ./.github/workflows/template.deploy.yaml
     with:
       deploy-dir: "./iac/terraform/prod"
-      terraform-version: 1.7.0
+      terraform-version: "1.7.0"
     secrets:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}

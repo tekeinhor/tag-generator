@@ -6,7 +6,7 @@ on:
         type: string
       terraform-version:
         required: true
-        type: number
+        type: string
     secrets:
       AWS_REGION:
         required: true
