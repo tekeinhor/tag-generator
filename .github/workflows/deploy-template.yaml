@@ -52,6 +52,7 @@ jobs:
         run: terraform validate -no-color
       
       - name: Terraform Plan
+        if: github.event_name == 'pull_request'
         id: plan
         run: terraform plan -no-color
         continue-on-error: true
@@ -93,5 +94,5 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.event.pull_request.merged == true
         run: terraform apply -auto-approve -input=false
