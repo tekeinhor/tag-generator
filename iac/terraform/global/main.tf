@@ -7,18 +7,6 @@ locals {
     for project in local.projects : project.members
   ])
 
-  # m = {
-  #   for index, member in local.all_members :
-  #   member.email => member.name
-  # }
-
-  # admin = {
-  #   for name, project in local.projects :
-  #   name => project.admin ? "a" : "b"
-  # }
-
-  # ops_members = coalesce(local.projects.Ops.members, [])
-  # x = toset([for member in local.ops_members: member.email])
 }
 
 
@@ -53,6 +41,18 @@ resource "aws_identitystore_group" "group" {
 }
 
 
+# Assign users to groups
+
+resource "aws_identitystore_group_membership" "example" {
+  for_each = merge([for name, project in local.projects : {
+    for member in project.members : name => member.email
+  }]...) # create a map of type {teamName : email}
+
+  identity_store_id = tolist(data.aws_ssoadmin_instances.this.identity_store_ids)[0]
+  group_id          = aws_identitystore_group.group[each.key].group_id
+  member_id         = aws_identitystore_user.this[each.value].user_id
+}
+
 
 # Create permissions and policy to attach to permissions
 
@@ -85,7 +85,7 @@ resource "aws_ssoadmin_managed_policy_attachment" "admin" {
 
 
 resource "aws_ssoadmin_account_assignment" "assignment" {
-  for_each = {
+  for_each = { # create a map of type {teamName : permission_set}
     for name, project in local.projects :
     name => project.admin ? aws_ssoadmin_permission_set.admin : aws_ssoadmin_permission_set.read_only
   }

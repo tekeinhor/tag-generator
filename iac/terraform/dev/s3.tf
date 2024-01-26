@@ -11,6 +11,5 @@ provider "aws" {
 module "s3_bucket_dev" {
   source = "../modules/s3"
 
-  bucket_name  = "tek-tag-generator-dev"
-  session_name = "tek-s3-dev"
+  bucket_name = "tek-tag-generator-dev"
 }

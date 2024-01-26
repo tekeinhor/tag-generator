@@ -3,8 +3,3 @@ variable "bucket_name" {
   type        = string
 }
 
-
-variable "session_name" {
-  description = "Provider assume role session name."
-  type        = string
-}
