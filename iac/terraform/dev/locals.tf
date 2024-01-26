@@ -1,10 +1,10 @@
 locals {
+
   region          = "eu-west-3"
   owner           = "Tatia"
   environment     = terraform.workspace
   managed_by      = "terraform"
   resource_origin = "https://github.com/tekeinhor/tag-generator"
-
 
   tags = {
     "owner"           = local.owner,

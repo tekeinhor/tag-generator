@@ -7,7 +7,6 @@ provider "aws" {
 }
 
 
-
 module "s3_bucket_dev" {
   source = "../modules/s3"
 
