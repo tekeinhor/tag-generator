@@ -17,7 +17,7 @@ def default_mocked_artifacts() -> ModelArtifacts:
         None,
         {
             "name": "",
-            "version": 1,
+            "version": "1.0.0",
             "description": "This is my model",
             "training_data": "",
         },
@@ -37,7 +37,7 @@ def default_mocked_engine() -> Engine:
         None,
         {
             "name": "",
-            "version": 1,
+            "version": "1.0.0",
             "description": "This is my model",
             "training_data": "",
         },

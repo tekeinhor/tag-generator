@@ -24,7 +24,7 @@ class ModelMetada(TypedDict):  # pylint:disable=too-many-ancestors, TO DO
     """Represents metadata to describe and identify an ML model."""
 
     name: str
-    version: int
+    version: str
     description: str
     training_data: str
 
@@ -135,7 +135,7 @@ if __name__ == "__main__":
         vectorizer=vectorizer,
         metadata={
             "name": "Multi-LR model",
-            "version": 1,
+            "version": "1.0.0",
             "description": "Simple One-vs-All Model",
             "training_data": "2024-01-02, 19:31:20",
         },

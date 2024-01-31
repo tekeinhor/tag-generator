@@ -1,9 +1,12 @@
 """Define all the endpoints of the API."""
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
 from functools import lru_cache
 from http import HTTPStatus
 from pathlib import Path
 
-from fastapi import APIRouter, Depends
+import botocore
+from fastapi import APIRouter, Depends, FastAPI
 from fastapi.responses import JSONResponse
 from starlette.requests import Request
 from tag_generator.inference_pipeline import ModelMetada
@@ -23,8 +26,23 @@ router = APIRouter(prefix=settings.API_PREFIX)
 @lru_cache
 def get_engine() -> Engine:
     """Create the Engine using lru_cache in order to not reinvoque at every router call."""
-    model_artifacts = Engine.load_model_from_local_fs()
-    return Engine(model_artifacts)
+    try:
+        model_artifacts = Engine.load_model_from_s3(
+            settings.S3_MODEL_BUCKET, settings.S3_MODEL_KEY, settings.S3_SESSION_PROFILE
+        )
+        return Engine(model_artifacts)
+    except botocore.exceptions.NoCredentialsError as no_creds_error:
+        logger.error("Unable to find to create the engine: %s", no_creds_error)
+        raise no_creds_error
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI) -> AsyncGenerator[None, None]:
+    """Perform the engine retrieval at API start up."""
+    logger.info("Retrieving get_engine()")
+    e = get_engine()
+    yield
+    del e
 
 
 @router.get(
@@ -43,8 +61,9 @@ def get_health_status() -> JSONResponse:
     description="",
     tags=["ML"],
 )
-def get_models(engine: Engine = Depends(get_engine)) -> ModelMetada:
+def get_models(request: Request, engine: Engine = Depends(get_engine)) -> ModelMetada:
     """Return models information."""
+    logger.info("Call %s", request.url)
     return engine.inference.artifacts.metadata
 
 

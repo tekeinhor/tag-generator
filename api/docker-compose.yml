@@ -13,4 +13,3 @@ services:
     environment:
       LOCAL_MODEL_PATH_DIR: /app/models
       NLTK_DATA: /app/nltk_data
-

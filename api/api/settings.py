@@ -19,7 +19,10 @@ class APISettings(BaseSettings):  # type: ignore # conflict between pydantic and
     API_DESCRIPTION: str = "Tag generator for stackoverflow questions using a multiclass model for predictions."
 
     # MODEL
-    LOCAL_MODEL_PATH_DIR: str = "/Users/tatia/Developer/tag-generator/core/models/2024-01-02/19"
+    LOCAL_MODEL_PATH_DIR: str = ""
+    S3_MODEL_BUCKET: str = "tek-tag-generator-dev"
+    S3_MODEL_KEY: str = "models/2024-01-02/19/193120_final_so_questions_2008_2023_artifacts_v1.0.0.pkl"
+    S3_SESSION_PROFILE: str = "tek-tatiana"
 
 
 settings = APISettings()

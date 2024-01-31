@@ -44,7 +44,6 @@ def run_command(kwargs: Dict[str, Dict[str, List[str]]], project_name: str = "")
         spinner = Halo(text=f">> Running `{name}`... ", spinner="arc", placement="left")
         spinner.start()
         result = subprocess.run(args=command["command"] + [project_name], check=False)
-        print("====>", result)
         status = result.returncode
         if status == 0:
             spinner.succeed(f"End: {name}")
