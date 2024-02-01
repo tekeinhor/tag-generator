@@ -11,8 +11,8 @@ import spacy
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from spacy.language import Language
-from tag_generator.preprocessing import count, detect_lang, extract_tags, filter_tag, sanitize, text_cleaner, top_k
-from tag_generator.settings import settings
+from taggenerator.preprocessing import count, detect_lang, extract_tags, filter_tag, sanitize, text_cleaner, top_k
+from taggenerator.settings import settings
 from tools.logger import set_logger
 from tqdm.auto import tqdm
 
@@ -217,7 +217,7 @@ if __name__ == "__main__":
     ruler.add(patterns=pattern, attrs=attrs, index=0)  # type: ignore # external lib
 
     # clean_df, clean_selected_col_df = test_sample_data(
-    #     "/Users/tatia/Developer/tag-generator/core/test_tag_generator/samples.csv",
+    #     "/Users/tatia/Developer/tag-generator/core/test_taggenerator/samples.csv",
     #     first_k,
     #     wordnet_lemmatizer,
     #     stop_words,

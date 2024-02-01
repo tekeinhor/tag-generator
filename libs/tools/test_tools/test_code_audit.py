@@ -16,7 +16,7 @@ def test_fmt() -> None:
 
 pyproject_data = """
 [tool.poetry]
-name = "tag_generator"
+name = "taggenerator"
 version = "0.1.0"
 description = ""
 authors = ["Tatiana <tatiana.ekeinhor@gmail.com>"]
@@ -31,7 +31,7 @@ build-backend = "poetry.core.masonry.api"
 
 @pytest.mark.parametrize(
     "filename,expected",
-    [("pyproject.toml", "tag_generator")],
+    [("pyproject.toml", "taggenerator")],
 )
 @patch(
     "builtins.open", new_callable=mock_open, read_data=pyproject_data.encode("utf-8")

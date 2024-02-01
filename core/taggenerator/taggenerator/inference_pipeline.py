@@ -11,7 +11,7 @@ import spacy
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import MultiLabelBinarizer
-from tag_generator.feature_pipeline import create_text_pipe
+from taggenerator.feature_pipeline import create_text_pipe
 from tools.logger import set_logger
 from typing_extensions import TypedDict
 

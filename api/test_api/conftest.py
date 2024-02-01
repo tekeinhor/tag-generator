@@ -4,7 +4,7 @@ Fixtures defined here can be used by any test in this package without needing to
 import them (pytest will discover them).
 """
 import pytest
-from tag_generator.inference_pipeline import ModelArtifacts, ModelMetada
+from taggenerator.inference_pipeline import ModelArtifacts, ModelMetada
 
 from api.service import Engine
 

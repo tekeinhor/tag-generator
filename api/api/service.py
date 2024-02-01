@@ -6,7 +6,7 @@ from typing import Optional
 import boto3
 import joblib
 import numpy.typing as npt
-from tag_generator.inference_pipeline import InferenceEngine, ModelArtifacts
+from taggenerator.inference_pipeline import InferenceEngine, ModelArtifacts
 from tools.logger import set_logger
 
 from api.settings import settings

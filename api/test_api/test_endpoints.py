@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 import pytest
 from fastapi.testclient import TestClient
-from tag_generator.inference_pipeline import ModelArtifacts
+from taggenerator.inference_pipeline import ModelArtifacts
 
 from api.endpoints import get_engine
 from api.main import app

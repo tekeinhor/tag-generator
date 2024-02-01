@@ -2,7 +2,7 @@ from typing import List
 
 import numpy as np
 import pytest
-from tag_generator.preprocessing import count, detect_extension, extract_tags, filter_tag, sanitize
+from taggenerator.preprocessing import count, detect_extension, extract_tags, filter_tag, sanitize
 
 top_10_tags = [
     "javascript",

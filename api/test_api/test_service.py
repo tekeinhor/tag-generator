@@ -1,7 +1,7 @@
 from unittest.mock import Mock, patch
 
 import pytest
-from tag_generator.inference_pipeline import InferenceEngine, ModelArtifacts
+from taggenerator.inference_pipeline import InferenceEngine, ModelArtifacts
 
 from api.service import Engine
 

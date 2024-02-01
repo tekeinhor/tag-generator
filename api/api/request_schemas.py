@@ -2,7 +2,7 @@
 from typing import List
 
 from pydantic import BaseModel
-from tag_generator.inference_pipeline import ModelMetada
+from taggenerator.inference_pipeline import ModelMetada
 
 
 class PredictionInput(BaseModel):  # type: ignore # incompatibility between pydantic and mypy v1.8

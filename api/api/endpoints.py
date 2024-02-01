@@ -9,7 +9,7 @@ import botocore
 from fastapi import APIRouter, Depends, FastAPI
 from fastapi.responses import JSONResponse
 from starlette.requests import Request
-from tag_generator.inference_pipeline import ModelMetada
+from taggenerator.inference_pipeline import ModelMetada
 from tools.logger import set_logger
 
 from api.request_schemas import PredictionInput, PredictionOutput

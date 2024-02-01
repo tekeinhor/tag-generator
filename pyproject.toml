@@ -6,13 +6,13 @@ authors = ["Tatiana <tatiana.ekeinhor@gmail.com>"]
 readme = "README.md"
 packages = [
     { include = "tools", from = "libs"},
-    # { include = "tag_generator", from = "core"},
+    # { include = "taggenerator", from = "core"},
 ]
 
 [tool.poetry.dependencies]
 python = "^3.11"
 ui = {path="ui", develop=true}
-tag_generator = {path="core/tag_generator", develop=true}
+taggenerator = {path="core/taggenerator", develop=true}
 api = {path="api", develop=true}
 python-semantic-release = "^8.7.0"
 coverage = "^7.4.0"

@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import pytest
-from tag_generator.feature_pipeline import create_tags_pipe
+from taggenerator.feature_pipeline import create_tags_pipe
 
 simple_data = {
     "Title": [
