@@ -20,8 +20,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Build python
         run: |
+          pwd
           bash --version
-          bash ./script/build.sh
+          bash ./scripts/build.sh
       - name: Store build artifacts
         uses: actions/upload-artifact@v4
         with:
