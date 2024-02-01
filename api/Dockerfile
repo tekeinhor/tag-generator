@@ -11,7 +11,7 @@ ENV NLTK_DATA=$NLTK_DATA_DIR
 
 COPY . .
 
-RUN pip install --pre --no-cache-dir -r requirements.txt
+RUN pip install --pre --no-cache-dir -r "${BUILD_PATH}/info/requirements.txt"
 RUN chown 1000 ${BUILD_PATH}
 
 USER 1000

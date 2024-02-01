@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # all python packages, in topological order
-PROJECTS='core/tag_generator libs/tools api'
+declare -A PROJECTS_MAP=(["taggenerator"]="core/taggenerator" ["tools"]="libs/tools" ["api"]="api")
