@@ -47,6 +47,7 @@ jobs:
             **/dist/*.whl
             **/deps/*.whl
             **/requirements.txt
+
   docker-build:
     runs-on: ubuntu-latest
     defaults:
@@ -64,7 +65,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           role-session-name: terraform-for-github
 
-     - name: Login to Amazon ECR
+      - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
@@ -73,7 +74,7 @@ jobs:
         with:
           name: build-artifacts
 
-    - name: Build, tag, and push image to Amazon ECR
+      - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
