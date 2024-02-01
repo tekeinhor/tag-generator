@@ -1,4 +1,4 @@
-name: build
+name: checks
 on:
   push:
     branches:
@@ -7,7 +7,7 @@ on:
       - "iac/terraform/**"
       - ".github/workflows/**"
 jobs:
-  build:
+  checks:
     runs-on: ubuntu-latest
     strategy:
       matrix:
