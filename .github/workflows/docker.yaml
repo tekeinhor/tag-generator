@@ -5,6 +5,9 @@ on:
     types: [opened, synchronize, closed]
     branches:
       - main
+env:
+  poetry_version: "1.7.1"
+  python_version: "3.11.7"
 
 permissions:
   id-token: write # This is required for aws oidc connection
@@ -18,10 +21,21 @@ jobs:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - name: Checkout repo
         uses: actions/checkout@v4
+      - name: TEst env python
+        run: |
+          echo $python_version $poetry_version
+          echo ${{ env.python_version }} ${{ env.poetry_version }}
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.python_version }}
       - name: Build python
         run: |
           pwd
           bash --version
+          python -m pip install --upgrade pip
+          pip install poetry==${{ env.poetry_version }}
+          poetry self add poetry-plugin-export
           bash ./scripts/build.sh
       - name: Store build artifacts
         uses: actions/upload-artifact@v4
