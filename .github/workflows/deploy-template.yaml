@@ -30,7 +30,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
-          role-session-name: terraform-for-github
+          role-session-name: docker-for-github
       
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
