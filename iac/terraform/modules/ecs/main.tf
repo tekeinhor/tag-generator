@@ -38,13 +38,22 @@ resource "aws_ecs_task_definition" "task_definition" {
       image  = var.image_id
       cpu    = 256
       memory = 512
-      port_mappings = [
+      portMappings = [
         {
-          container_port = 8080
-          host_port      = 8080
-          protocol       = "tcp"
+          containerPort = 8080
+          hostPort      = 8080
+          protocol      = "tcp"
         }
       ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-create-group  = "true"
+          awslogs-group         = "awslogs-tagggenerator"
+          awslogs-region        = var.region
+          awslogs-stream-prefix = "awslogs-example"
+        }
+      }
     }
   ])
 
