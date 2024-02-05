@@ -33,3 +33,9 @@ variable "bucket_name" {
   type        = string
 }
 
+variable "region" {
+  description = "Region of AWS account"
+  type        = string
+}
+
+
