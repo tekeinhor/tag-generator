@@ -6,7 +6,6 @@ locals {
   managed_by      = "terraform"
   resource_origin = "https://github.com/tekeinhor/tag-generator"
 
-
   tags = {
     "owner"           = local.owner,
     "env"             = local.environment,

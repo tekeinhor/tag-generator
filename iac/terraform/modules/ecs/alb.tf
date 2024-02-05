@@ -1,6 +1,6 @@
 # Create a load balancer:
 resource "aws_lb" "application_load_balancer" {
-  name               = "load-balancer" #load balancer name
+  name               = "load-balancer-${var.env_suffix}" #load balancer name
   load_balancer_type = "application"
   subnets            = var.vpc_id_subnet_list
   internal           = false
@@ -10,7 +10,7 @@ resource "aws_lb" "application_load_balancer" {
 
 # Configure the load balancer with the VPC network
 resource "aws_lb_target_group" "target_group" {
-  name        = "target-group"
+  name        = "target-group-${var.env_suffix}"
   port        = 8080
   protocol    = "HTTP"
   target_type = "ip"
@@ -29,7 +29,7 @@ resource "aws_lb_listener" "listener" {
 
 # Create a security group for the load balancer:
 resource "aws_security_group" "load_balancer_security_group" {
-  name        = "lb_sg"
+  name        = "lb_sg-${var.env_suffix}"
   description = "security group for the load_balancer"
   vpc_id      = data.aws_vpc.default.id
 

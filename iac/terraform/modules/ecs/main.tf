@@ -48,10 +48,9 @@ resource "aws_ecs_task_definition" "task_definition" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-create-group  = "true"
-          awslogs-group         = "awslogs-tagggenerator"
+          awslogs-group         = var.log_group
           awslogs-region        = var.region
-          awslogs-stream-prefix = "awslogs-example"
+          awslogs-stream-prefix = "taggenerator-${var.env_suffix}"
         }
       }
     }
