@@ -34,7 +34,18 @@ variable "bucket_name" {
 }
 
 variable "region" {
-  description = "Region of AWS account"
+  description = "Region of AWS account."
+  type        = string
+}
+
+variable "log_group" {
+  description = "Log group of the ECS logs."
+  type        = string
+}
+
+
+variable "env_suffix" {
+  description = "Env suffix for ressources"
   type        = string
 }
 
