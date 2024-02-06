@@ -14,7 +14,7 @@ on:
       - main
     paths-ignore:
       - "iac/terraform/**"
-      - ".github/workflows/**"
+      # - ".github/workflows/**"
   
 env:
   python_version: "3.11.7"
@@ -29,6 +29,9 @@ jobs:
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      # https://joht.github.io/johtizen/build/2022/01/20/github-actions-push-into-repository.html#git-commit-within-a-pull-request
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
@@ -36,6 +39,7 @@ jobs:
       # it is not possible to use `poetry shell`in an non-interactive env (https://github.com/orgs/python-poetry/discussions/3526)
       - name: Install dependencies
         run: |
+          echo ${{ github.head_ref }}
           python -m pip install --upgrade pip
           pip install poetry=="1.7.1"
           poetry install -vvv --no-cache
@@ -60,8 +64,9 @@ jobs:
           git config user.email github-actions@github.com
           git add $COVERAGE_SVG
           git diff --quiet $COVERAGE_SVG && git diff --staged --quiet $COVERAGE_SVG || git commit -m "ci(badge): add/update test-cov badge"
+          echo ${{ github.head_ref }}
+          git show-ref
           git push
-
       - run: echo "🍏 This job's status is ${{ job.status }}."
   release:
     if: github.event.pull_request.merged == true

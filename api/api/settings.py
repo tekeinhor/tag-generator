@@ -22,7 +22,7 @@ class APISettings(BaseSettings):  # type: ignore # conflict between pydantic and
     LOCAL_MODEL_PATH_DIR: str = ""
     S3_MODEL_BUCKET: str = "tek-tag-generator-dev"
     S3_MODEL_KEY: str = "models/2024-01-02/19/193120_final_so_questions_2008_2023_artifacts_v1.0.0.pkl"
-    S3_SESSION_PROFILE: str = "tek-tatiana"
+    S3_SESSION_PROFILE: str | None = None
 
 
 settings = APISettings()
