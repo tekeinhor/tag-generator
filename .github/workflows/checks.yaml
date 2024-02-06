@@ -86,7 +86,7 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           python -m pip install --upgrade pip
-          pip install semantic-release==${{ env.semantic_release_version }}
+          pip install python-semantic-release==${{ env.semantic_release_version }}
           export GH_TOKEN=${{ secrets.GITHUB_TOKEN }}
           if [ ${{inputs.options}} == 'release' ]; then
             echo "RELEASE"
