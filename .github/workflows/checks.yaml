@@ -89,6 +89,7 @@ jobs:
           echo "${{inputs.release_option}}"
           git config user.name github-actions
           git config user.email github-actions@github.com
+          git config --system --add safe.directory "*"
           python -m pip install --upgrade pip
           pip install python-semantic-release==${{ env.semantic_release_version }}
           export GH_TOKEN=${{ secrets.GITHUB_TOKEN }}
@@ -99,3 +100,5 @@ jobs:
             echo "PRE-RELEASE"
             semantic-release version --prerelease
           fi
+        # See https://github.com/actions/runner-images/issues/6775#issuecomment-1409268124
+        # and https://github.com/actions/runner-images/issues/6775#issuecomment-1410270956 for line 92
