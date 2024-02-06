@@ -2,12 +2,13 @@ name: checks
 on:
   workflow_dispatch:
     inputs:
-      release_option:
+      pre_release:
         type: choice
-        description: type of semantic-release
+        description: wheither to pre-realease or not
+        default: 'true'
         options: 
-          - prerelease
-          - release
+          - true
+          - false
   pull_request:
     types: [opened, synchronize, closed]
     branches:
@@ -83,22 +84,8 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ env.python_version }}
-      - name: Install semantic-release and run it
-        run: |
-          pwd
-          echo "${{inputs.release_option}}"
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git config --system --add safe.directory "*"
-          python -m pip install --upgrade pip
-          pip install python-semantic-release==${{ env.semantic_release_version }}
-          export GH_TOKEN=${{ secrets.GITHUB_TOKEN }}
-          if [ ${{inputs.release_option}} == 'release' ]; then
-            echo "RELEASE"
-            semantic-release version
-          else
-            echo "PRE-RELEASE"
-            semantic-release version --prerelease
-          fi
-        # See https://github.com/actions/runner-images/issues/6775#issuecomment-1409268124
-        # and https://github.com/actions/runner-images/issues/6775#issuecomment-1410270956 for line 92
+      - name: Python Semantic Release
+        uses: python-semantic-release/python-semantic-release@master
+        with:
+          prerelease: ${{inputs.pre_release}}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
