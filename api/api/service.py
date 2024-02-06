@@ -31,12 +31,16 @@ class Engine:
         return self.inference.predict(features)
 
     @staticmethod
-    def load_model_from_s3(bucket: str, key: str, session_profile: str) -> ModelArtifacts:
+    def load_model_from_s3(bucket: str, key: str, session_profile: str | None) -> ModelArtifacts:
         """Load the model from s3."""
         logger.info("Starting loading the model from %s and %s", bucket, key)
         with BytesIO() as artifacts_file:
-            session = boto3.Session(profile_name=session_profile)
-            session.client("s3").download_fileobj(Bucket=bucket, Key=key, Fileobj=artifacts_file)
+            if session_profile:
+                session = boto3.Session(profile_name=session_profile)
+                session.client("s3").download_fileobj(Bucket=bucket, Key=key, Fileobj=artifacts_file)
+            else:
+                s3_client = boto3.client("s3")
+                s3_client.download_fileobj(Bucket=bucket, Key=key, Fileobj=artifacts_file)
             artifacts_file.seek(0)
             artifacts = joblib.load(artifacts_file)
 
