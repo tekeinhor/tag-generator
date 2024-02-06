@@ -1,0 +1,95 @@
+# workflow triggers when a tag is created
+# it will build the python code, build a docker image and push it to ECR
+name: tag
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "*"
+env:
+  poetry_version: "1.7.1"
+  python_version: "3.11.7"
+  ECR_REPOSITORY_PREFIX: tag_generator
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: TEst env python
+        run: |
+          echo $python_version $poetry_version
+          echo ${{ env.python_version }} ${{ env.poetry_version }}
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.python_version }}
+      - name: Build python
+        run: |
+          pwd
+          bash --version
+          python -m pip install --upgrade pip
+          pip install poetry==${{ env.poetry_version }}
+          poetry self add poetry-plugin-export
+          bash ./scripts/build.sh
+      - name: Store build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            **/dist/*.whl
+            **/deps/*.whl
+            **/requirements.txt
+
+  docker-build:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: [{name: api, dir: api}]
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ matrix.package.dir }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4 # More information on this action can be found below in the 'AWS Credentials' section
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: terraform-for-github
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Download a single artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{github.ref_name}}
+          ECR_REPOSITORY: "ECR_REPOSITORY_PREFIX/${{matrix.package.name}}"
+        run: |
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg="BUILD_PATH=/app" .
+
+      - name: Push to ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{github.ref_name}}
+          ECR_REPOSITORY: "ECR_REPOSITORY_PREFIX/${{matrix.package.name}}"
+        run: |
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT

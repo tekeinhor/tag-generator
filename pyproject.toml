@@ -117,3 +117,25 @@ plugins = ["pydantic.mypy"] #,"sqlmypy"
 
 [tool.isort]
 line_length = 120
+
+
+[tool.semantic_release]
+version_toml = [
+    "pyproject.toml:tool.poetry.version",
+    "api/pyproject.toml:tool.poetry.version",
+    "core/taggenerator/pyproject.toml:tool.poetry.version",
+    "libs/tools/pyproject.toml:tool.poetry.version",
+]
+tag_format = "{version}"
+
+[tool.semantic_release.publish]
+upload_to_vcs_release = false
+
+[tool.semantic_release.branches.main]
+match = "(main|master)"
+prerelease_token = "rc"
+prerelease = false
+
+[tool.semantic_release.commit_parser_options]
+minor_tags = [ "feat" ]
+patch_tags = [ "build", "chore", "ci", "docs", "fix", "perf", "style", "refactor", "test", "bump" ]
