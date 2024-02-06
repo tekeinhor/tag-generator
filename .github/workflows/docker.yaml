@@ -1,99 +1,99 @@
-name: docker
-on:
-  workflow_dispatch:
-  pull_request:
-    types: [opened, synchronize, closed]
-    branches:
-      - main
-    paths-ignore:
-      - "iac/terraform/**"
-      - ".github/workflows/**"
-env:
-  poetry_version: "1.7.1"
-  python_version: "3.11.7"
-  ECR_REPOSITORY: tag_generator/api 
-  to_deploy: api
+# name: docker
+# on:
+#   workflow_dispatch:
+#   pull_request:
+#     types: [opened, synchronize, closed]
+#     branches:
+#       - main
+#     paths-ignore:
+#       - "iac/terraform/**"
+#       - ".github/workflows/**"
+# env:
+#   poetry_version: "1.7.1"
+#   python_version: "3.11.7"
+#   ECR_REPOSITORY: tag_generator/api 
+#   to_deploy: api
 
-permissions:
-  id-token: write # This is required for aws oidc connection
-  contents: read # This is required for actions/checkout
-  pull-requests: write # This is required for gh bot to comment PR
+# permissions:
+#   id-token: write # This is required for aws oidc connection
+#   contents: read # This is required for actions/checkout
+#   pull-requests: write # This is required for gh bot to comment PR
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - name: Checkout repo
-        uses: actions/checkout@v4
-      - name: TEst env python
-        run: |
-          echo $python_version $poetry_version
-          echo ${{ env.python_version }} ${{ env.poetry_version }}
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ env.python_version }}
-      - name: Build python
-        run: |
-          pwd
-          bash --version
-          python -m pip install --upgrade pip
-          pip install poetry==${{ env.poetry_version }}
-          poetry self add poetry-plugin-export
-          bash ./scripts/build.sh
-      - name: Store build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts
-          path: |
-            **/dist/*.whl
-            **/deps/*.whl
-            **/requirements.txt
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+#       - name: Checkout repo
+#         uses: actions/checkout@v4
+#       - name: TEst env python
+#         run: |
+#           echo $python_version $poetry_version
+#           echo ${{ env.python_version }} ${{ env.poetry_version }}
+#       - name: Set up Python
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: ${{ env.python_version }}
+#       - name: Build python
+#         run: |
+#           pwd
+#           bash --version
+#           python -m pip install --upgrade pip
+#           pip install poetry==${{ env.poetry_version }}
+#           poetry self add poetry-plugin-export
+#           bash ./scripts/build.sh
+#       - name: Store build artifacts
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: build-artifacts
+#           path: |
+#             **/dist/*.whl
+#             **/deps/*.whl
+#             **/requirements.txt
 
-  docker-build:
-    needs: build
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: ${{ env.to_deploy }}
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+#   docker-build:
+#     needs: build
+#     runs-on: ubuntu-latest
+#     defaults:
+#       run:
+#         shell: bash
+#         working-directory: ${{ env.to_deploy }}
+#     steps:
+#       - name: Checkout repo
+#         uses: actions/checkout@v4
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4 # More information on this action can be found below in the 'AWS Credentials' section
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          role-session-name: terraform-for-github
+#       - name: Configure AWS credentials
+#         uses: aws-actions/configure-aws-credentials@v4 # More information on this action can be found below in the 'AWS Credentials' section
+#         with:
+#           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+#           aws-region: ${{ secrets.AWS_REGION }}
+#           role-session-name: terraform-for-github
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
+#       - name: Login to Amazon ECR
+#         id: login-ecr
+#         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Download a single artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
+#       - name: Download a single artifact
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: build-artifacts
 
-      - name: Build, tag, and push image to Amazon ECR
-        id: build-image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          # Build a docker container and
-          # push it to ECR so that it can
-          # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg="BUILD_PATH=/app" .
+#       - name: Build, tag, and push image to Amazon ECR
+#         id: build-image
+#         env:
+#           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+#           IMAGE_TAG: ${{ github.sha }}
+#         run: |
+#           # Build a docker container and
+#           # push it to ECR so that it can
+#           # be deployed to ECS.
+#           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg="BUILD_PATH=/app" .
 
-      - name: Push to ECR
-        if: github.event.pull_request.merged == true
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+#       - name: Push to ECR
+#         if: github.event.pull_request.merged == true
+#         env:
+#           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+#           IMAGE_TAG: ${{ github.sha }}
+#         run: |
+#           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+#           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
