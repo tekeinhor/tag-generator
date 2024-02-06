@@ -2,7 +2,7 @@ name: checks
 on:
   workflow_dispatch:
     inputs:
-      name:
+      release_option:
         type: choice
         description: type of semantic-release
         options: 
@@ -15,10 +15,11 @@ on:
     paths-ignore:
       - "iac/terraform/**"
       # - ".github/workflows/**"
-  
+
 env:
   python_version: "3.11.7"
   semantic_release_version: "8.7.0"
+
 jobs:
   checks:
     if: github.event_name == 'pull_request' && github.event.pull_request.merged != true
@@ -70,6 +71,9 @@ jobs:
       - run: echo "🍏 This job's status is ${{ job.status }}."
   release:
     if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
+    permissions:
+      id-token: write # This is required for semantic-release
+      contents: write # This is required for semantic-release
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
@@ -82,13 +86,13 @@ jobs:
       - name: Install semantic-release and run it
         run: |
           pwd
-          echo "${{inputs.options}}"
+          echo "${{inputs.release_option}}"
           git config user.name github-actions
           git config user.email github-actions@github.com
           python -m pip install --upgrade pip
           pip install python-semantic-release==${{ env.semantic_release_version }}
           export GH_TOKEN=${{ secrets.GITHUB_TOKEN }}
-          if [ ${{inputs.options}} == 'release' ]; then
+          if [ ${{inputs.release_option}} == 'release' ]; then
             echo "RELEASE"
             semantic-release version
           else
