@@ -76,14 +76,13 @@ jobs:
       id-token: write # This is required for semantic-release
       contents: write # This is required for semantic-release
     runs-on: ubuntu-latest
+    concurrency: release
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - name: Checkout repo
         uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v4
         with:
-          python-version: ${{ env.python_version }}
+          fetch-depth: 0
       - name: Python Semantic Release
         uses: python-semantic-release/python-semantic-release@master
         with:
