@@ -87,4 +87,4 @@ jobs:
         uses: python-semantic-release/python-semantic-release@master
         with:
           prerelease: ${{inputs.pre_release}}
-          github_token: ${{ secrets.WORKFLOW_TRIGGER_KEY }}
+          github_token: ${{ secrets.SEMANTIC_RELEASE }}
