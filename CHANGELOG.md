@@ -2,6 +2,17 @@
 
 
 
+## v0.1.1-rc.1 (2024-02-07)
+
+### Fix
+
+* fix: replace semantic-release token with pat ([`ed01c78`](https://github.com/tekeinhor/tag-generator/commit/ed01c784d3b9a641a83d14be044ba670b6125391))
+
+* fix: add permission to docker build job ([`c527312`](https://github.com/tekeinhor/tag-generator/commit/c52731267ab0e47ef8546cbc74b62236498388b0))
+
+* fix: use correct key name for semantic release ([`0ce83f3`](https://github.com/tekeinhor/tag-generator/commit/0ce83f3734ea13ff971d2b48781408a97f5cc04f))
+
+
 ## v0.1.0 (2024-02-07)
 
 ### Test
