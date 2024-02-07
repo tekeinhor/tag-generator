@@ -11,6 +11,11 @@ env:
   python_version: "3.11.7"
   ECR_REPOSITORY_PREFIX: tag_generator
 
+permissions:
+  id-token: write # This is required for aws oidc connection
+  contents: read # This is required for actions/checkout
+  pull-requests: write # This is required for gh bot to comment PR
+
 jobs:
   build:
     runs-on: ubuntu-latest
