@@ -2,6 +2,17 @@
 
 
 
+## v0.1.1 (2024-02-07)
+
+### Fix
+
+* fix: test checkout in checks with pat ([`c84d51f`](https://github.com/tekeinhor/tag-generator/commit/c84d51f729f9e383d5558d9c61912f1e520c12f0))
+
+### Unknown
+
+* Merge branch &#39;main&#39; of https://github.com/tekeinhor/tag-generator ([`8a573f8`](https://github.com/tekeinhor/tag-generator/commit/8a573f8459d3fa27ad342031c6f27d99d66ea6cf))
+
+
 ## v0.1.1-rc.1 (2024-02-07)
 
 ### Fix
