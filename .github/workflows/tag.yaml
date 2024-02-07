@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - "*"
+      - '*'
 env:
   poetry_version: "1.7.1"
   python_version: "3.11.7"
