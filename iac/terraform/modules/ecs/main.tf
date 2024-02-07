@@ -32,6 +32,7 @@ resource "aws_ecs_task_definition" "task_definition" {
   memory                   = "512"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.this.arn
+  task_role_arn            = aws_iam_role.task.arn
   container_definitions = jsonencode([
     {
       name   = "tag-generator-api-container"
@@ -78,7 +79,7 @@ resource "aws_ecs_service" "service" {
 }
 
 
-# create the role that the ECS service should use to run the container
+# create the role that the ECS service permissions (read ECR etc...)
 resource "aws_iam_role" "this" {
   name               = "ECSTaskExecutionRole"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
@@ -101,12 +102,18 @@ data "aws_iam_policy" "ecs_managed_role_policy" {
   arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-resource "aws_iam_role_policy_attachment" "that" {
+resource "aws_iam_role_policy_attachment" "this" {
   role       = aws_iam_role.this.name
   policy_arn = data.aws_iam_policy.ecs_managed_role_policy.arn
 }
 
-# create custom inline policy and attached it to our role
+# create role and custom inline policy and attached it to the task role
+# (for permissions that the docker run by ECS needs)
+
+resource "aws_iam_role" "task" {
+  name               = "ECSTaskRole"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
 data "aws_iam_policy_document" "inline_policy_doc" {
 
   statement {
@@ -125,11 +132,11 @@ data "aws_iam_policy_document" "inline_policy_doc" {
 }
 
 resource "aws_iam_policy" "inline_policy" {
-  name   = "ECSTaskExecutionInlinePolicy"
+  name   = "ECSTaskS3RoleInlinePolicy"
   policy = data.aws_iam_policy_document.inline_policy_doc.json
 }
 
-resource "aws_iam_role_policy_attachment" "this" {
-  role       = aws_iam_role.this.name
+resource "aws_iam_role_policy_attachment" "that" {
+  role       = aws_iam_role.task.name
   policy_arn = aws_iam_policy.inline_policy.arn
 }
