@@ -2,6 +2,17 @@
 
 
 
+## v0.1.0 (2024-02-07)
+
+### Test
+
+* test: remove token used in checkout and test deploy key with semantic release ([`c18a655`](https://github.com/tekeinhor/tag-generator/commit/c18a655793c1cebbc59493fe339d90a02b97901d))
+
+* test: use PAT as secrets for semantic release ([`45303d3`](https://github.com/tekeinhor/tag-generator/commit/45303d3280c98d613f1e00ceae86986a3ab8a6a7))
+
+* test: use deploy key instead of github token ([`4943961`](https://github.com/tekeinhor/tag-generator/commit/49439611f1b6c077502d5b9b4d69f37f20a73301))
+
+
 ## v0.1.0-rc.1 (2024-02-06)
 
 ### Chore
