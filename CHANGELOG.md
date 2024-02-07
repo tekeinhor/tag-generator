@@ -2,6 +2,13 @@
 
 
 
+## v0.1.2 (2024-02-07)
+
+### Fix
+
+* fix: correct typo in ecr repo prefix ([`073f2df`](https://github.com/tekeinhor/tag-generator/commit/073f2dfc067d9dc8978e40301baf92e108cd9018))
+
+
 ## v0.1.1 (2024-02-07)
 
 ### Fix
