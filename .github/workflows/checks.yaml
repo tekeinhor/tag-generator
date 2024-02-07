@@ -83,9 +83,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ssh-key: "${{ secrets.SEMANTIC_RELEASE }}"
       - name: Python Semantic Release
         uses: python-semantic-release/python-semantic-release@master
         with:
           prerelease: ${{inputs.pre_release}}
-          github_token: ${{ secrets.SEMANTIC_RELEASE }}
+          github_token: ${{ secrets.DEPLOY_KEY }}
