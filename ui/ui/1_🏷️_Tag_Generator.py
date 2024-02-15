@@ -6,7 +6,7 @@ from typing import List
 import requests
 import streamlit as st
 
-from settings import settings
+from ui.settings import settings
 
 st.set_page_config(
     page_title="Tag Generator",
