@@ -5,3 +5,4 @@ core/models/*
 coverage.xml
 **/.terraform*
 **/deps/*
+**/info/*

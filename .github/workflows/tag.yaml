@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        package: [{name: api, dir: api}]
+        package: [{name: api, dir: api}, {name: ui, dir: ui}]
     defaults:
       run:
         shell: bash
