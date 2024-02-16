@@ -2,6 +2,19 @@
 
 
 
+## v0.2.1-rc.1 (2024-02-16)
+
+### Fix
+
+* fix: allow ci to create ECR repo if it doesn&#39;t exist ([`0186b17`](https://github.com/tekeinhor/tag-generator/commit/0186b17d5c30fbba86dad69fda7bb901d9353a4e))
+
+### Unknown
+
+* Merge pull request #19 from tekeinhor/feature-ecr-to-ci
+
+fix: allow ci to create ECR repo if it doesn&#39;t exist ([`fd17e8c`](https://github.com/tekeinhor/tag-generator/commit/fd17e8cf57af40c7c7d1b9c6adf220ae0890a29a))
+
+
 ## v0.2.0 (2024-02-16)
 
 ### Documentation
