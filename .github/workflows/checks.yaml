@@ -80,6 +80,7 @@ jobs:
     concurrency: release
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "input prerelease value ${{ inputs.pre_release }} "
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
@@ -88,5 +89,5 @@ jobs:
       - name: Python Semantic Release
         uses: python-semantic-release/python-semantic-release@master
         with:
-          prerelease: ${{inputs.pre_release}}
+          prerelease: ${{ inputs.pre_release }}
           github_token: ${{ secrets.SEMANTIC_RELEASE }}

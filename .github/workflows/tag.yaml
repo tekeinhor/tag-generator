@@ -79,8 +79,9 @@ jobs:
         with:
           name: build-artifacts
 
-      - name: Build, tag, and push image to Amazon ECR
+      - name: Build and tag to image
         id: build-image
+        working-directory: ${{ matrix.package.dir }}
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{github.ref_name}}
@@ -90,6 +91,13 @@ jobs:
           # push it to ECR so that it can
           # be deployed to ECS.
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg="BUILD_PATH=/app" .
+
+      - name: Create ECR repository if it doesn't exist
+        id: manage-ecr
+        working-directory: .github/workflows
+        env:
+          ECR_REPOSITORY: "${{env.ECR_REPOSITORY_PREFIX}}/${{matrix.package.name}}"
+        run: source ci.sh && create_ecr_repo $ECR_REPOSITORY
 
       - name: Push to ECR
         env:
