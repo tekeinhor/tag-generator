@@ -123,6 +123,7 @@ line_length = 120
 version_toml = [
     "pyproject.toml:tool.poetry.version",
     "api/pyproject.toml:tool.poetry.version",
+    "ui/pyproject.toml:tool.poetry.version",
     "core/taggenerator/pyproject.toml:tool.poetry.version",
     "libs/tools/pyproject.toml:tool.poetry.version",
 ]

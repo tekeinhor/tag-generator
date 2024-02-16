@@ -16,6 +16,7 @@ on:
     paths-ignore:
       - "iac/terraform/**"
       - ".github/workflows/**"
+      - "assets/**"
 
 env:
   python_version: "3.11.7"
