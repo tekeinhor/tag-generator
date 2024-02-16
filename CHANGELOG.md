@@ -2,6 +2,33 @@
 
 
 
+## v0.2.0 (2024-02-16)
+
+### Documentation
+
+* docs: add ci workflow documentation and disable ci run for assets/ dir ([`f57ccb0`](https://github.com/tekeinhor/tag-generator/commit/f57ccb0aa1a4378bf1675bc62484b096a100582f))
+
+* docs: update readme with project goal, code structure and tools used ([`dac5cf9`](https://github.com/tekeinhor/tag-generator/commit/dac5cf9fb37f51e2dbd5bea54aa72ade8f14f878))
+
+### Feature
+
+* feat(ui): add dockerfile for UI ([`ea76269`](https://github.com/tekeinhor/tag-generator/commit/ea762691eb4caf70e29a7b615678f3a9871d0ea9))
+
+* feat: update version of image in ecs ([`941c52d`](https://github.com/tekeinhor/tag-generator/commit/941c52dacd3aa3079a38f4f4de4d7019dbc546bf))
+
+### Fix
+
+* fix: run streamlit as a python pkg to avoid import error in docker ([`8c1d103`](https://github.com/tekeinhor/tag-generator/commit/8c1d103f66fd8d60f8b6842b6034765fe8ad1fc8))
+
+* fix(iac): add missing task_role_arn for ECS docker permissions ([`fa281d4`](https://github.com/tekeinhor/tag-generator/commit/fa281d437d8ba1730ff1b3dce77dd87d0dbd4dfa))
+
+### Unknown
+
+* Merge pull request #18 from tekeinhor/feature-ui
+
+feat(ui): add dockerfile for UI ([`827f732`](https://github.com/tekeinhor/tag-generator/commit/827f732824f322c101002cb80539a9178863dbf0))
+
+
 ## v0.1.2 (2024-02-07)
 
 ### Fix
