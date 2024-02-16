@@ -8,7 +8,6 @@ import streamlit as st
 
 from ui.settings import settings
 
-# ENDPOINT_URL = "http://localhost:8080/api/v1/predict"
 st.set_page_config(
     page_title="Tag Generator",
     page_icon="🏷️",
@@ -18,7 +17,7 @@ st.set_page_config(
 def call_api(title: str, body: str) -> List[str]:
     """Call to the API for tags generation."""
     payload = {"title": title, "body": body}
-    response = requests.post(settings.ENDPOINT_URL, data=json.dumps(payload), timeout=60)
+    response = requests.post(settings.API_ENDPOINT_URL, data=json.dumps(payload), timeout=60)
     if response.status_code == HTTPStatus.OK:
         output = json.loads(response.content)
         tags: List[str] = output["tags"]

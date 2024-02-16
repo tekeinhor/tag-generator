@@ -8,7 +8,7 @@ class UISettings(BaseSettings):  # type: ignore # conflict between mypy v1.8 and
     ENV: str | None = "dev"
 
     # SERVER
-    ENDPOINT_URL: str = "http://localhost:8080/api/v1/predict"
+    API_ENDPOINT_URL: str = "http://localhost:8080/api/v1/predict"
 
 
 settings = UISettings()
