@@ -24,7 +24,7 @@ for pkg_path in ${PROJECTS_MAP[@]}; do
     # for each pkg_path retrieve the package and its version
     pkg_name=$(poetry version | awk '{print $1}')
     pkg_version=$(poetry version | awk '{print $2}')
-  
+    pkg_version=$(echo ${pkg_version} | sed "s/-rc./rc/") # appyling the sed because of the scheme use for version in wheel build https://packaging.python.org/en/latest/specifications/version-specifiers/#public-version-identifiers
     # create a dict with pkg_name and their corresponding wheel location
     PKG_WHEEL_NAMES[$pkg_name]="${pkg_name}-${pkg_version}-py3-none-any.whl"
 done
