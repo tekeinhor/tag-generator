@@ -2,6 +2,21 @@
 
 
 
+## v0.2.1-rc.3 (2024-02-19)
+
+### Fix
+
+* fix(cicd): cancel fail-fast behavior of the github action in ecr management stage ([`96d65ac`](https://github.com/tekeinhor/tag-generator/commit/96d65ac4915411594e85ffa40cacc0e31559cd37))
+
+### Test
+
+* test(ci): add a test job just for ECR creation ([`8bda54a`](https://github.com/tekeinhor/tag-generator/commit/8bda54aac6cf0c44484a0ec62e3c57a9589d36fb))
+
+### Unknown
+
+* Merge branch &#39;main&#39; of https://github.com/tekeinhor/tag-generator ([`57bfb8f`](https://github.com/tekeinhor/tag-generator/commit/57bfb8fc697068c56c6590164e5051bb810fe721))
+
+
 ## v0.2.1-rc.2 (2024-02-19)
 
 ### Fix
