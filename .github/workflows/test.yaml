@@ -1,6 +1,13 @@
 name: test
 on:
   workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, closed]
+    branches:
+      - main
+    paths:
+      - ".github/workflows/ci.sh"
+      - ".github/workflows/test.yaml"
 env:
   poetry_version: "1.7.1"
   python_version: "3.11.7"
@@ -37,5 +44,5 @@ jobs:
         id: manage-ecr
         working-directory: .github/workflows
         env:
-          ECR_REPOSITORY: "${{env.ECR_REPOSITORY_PREFIX}}/${{matrix.package.name}}"
+          ECR_REPOSITORY: "${{env.ECR_REPOSITORY_PREFIX}}/api"
         run: source ci.sh && create_ecr_repo $ECR_REPOSITORY
