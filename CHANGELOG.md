@@ -2,6 +2,15 @@
 
 
 
+## v0.2.1-rc.2 (2024-02-19)
+
+### Fix
+
+* fix(ci): change ecr repo naming ([`ce19b75`](https://github.com/tekeinhor/tag-generator/commit/ce19b75de04ada877238c4962bc86b2e62bb5a99))
+
+* fix(build): reformat wheel naming format in release candidate case ([`2edcbc2`](https://github.com/tekeinhor/tag-generator/commit/2edcbc2348080594e639f02ee17b397fcd2d2160))
+
+
 ## v0.2.1-rc.1 (2024-02-16)
 
 ### Fix
