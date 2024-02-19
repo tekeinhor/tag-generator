@@ -57,7 +57,6 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ${{ matrix.package.dir }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4

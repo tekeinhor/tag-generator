@@ -5,6 +5,8 @@ create_ecr_repo () {
     echo "repository name: ${REPO_NAME}"
     output=$(aws ecr describe-repositories --repository-names ${REPO_NAME} 2>&1) #redirect stdout in case of success and stderr otherwise, in output
     status_code=$? # store the exit code of the previous cmd
+    echo "current output: ${output}"
+    echo "status of cmd: ${status_code}"
     if [ $status_code -ne 0 ]; then # cmd was not successfull
         if echo ${output} | grep -q RepositoryNotFoundException; then
             echo "echo repository doesn't exist, will create it"

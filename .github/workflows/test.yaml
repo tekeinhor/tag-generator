@@ -1,0 +1,41 @@
+name: test
+on:
+  workflow_dispatch:
+env:
+  poetry_version: "1.7.1"
+  python_version: "3.11.7"
+  ECR_REPOSITORY_PREFIX: taggenerator
+
+permissions:
+  id-token: write # This is required for aws oidc connection
+  contents: read # This is required for actions/checkout
+  pull-requests: write # This is required for gh bot to comment PR
+
+jobs:
+  test-ecr:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4 # More information on this action can be found below in the 'AWS Credentials' section
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: terraform-for-github
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Create ECR repository if it doesn't exist
+        id: manage-ecr
+        working-directory: .github/workflows
+        env:
+          ECR_REPOSITORY: "${{env.ECR_REPOSITORY_PREFIX}}/${{matrix.package.name}}"
+        run: source ci.sh && create_ecr_repo $ECR_REPOSITORY
