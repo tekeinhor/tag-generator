@@ -9,7 +9,7 @@ on:
 env:
   poetry_version: "1.7.1"
   python_version: "3.11.7"
-  ECR_REPOSITORY_PREFIX: tag_generator
+  ECR_REPOSITORY_PREFIX: taggenerator
 
 permissions:
   id-token: write # This is required for aws oidc connection
