@@ -1,6 +1,6 @@
 api:
   image: taggenerator/api
-  tag: "0.2.1-rc.3"
+  tag: "0.3.0"
 ui:
   image: taggenerator/ui
-  tag: "0.2.1-rc.3"
+  tag: "0.3.0"
