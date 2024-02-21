@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "ui_task" {
       environment = [
         {
           name  = "API_ENDPOINT_URL"
-          value = "http://${var.api.dns_name}:${var.api.container_port}" # should look like this http://dev-api:8080
+          value = "http://${var.api.dns_name}:${var.api.container_port}/api/v1/predict" # should look like this http://dev-api:8080
         }
       ]
       portMappings = [
