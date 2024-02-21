@@ -4,7 +4,7 @@ data "aws_vpc" "default" {
 
 resource "aws_security_group" "ecs_sg" {
   vpc_id = data.aws_vpc.default.id
-  name   = "ecs-security-group"
+  name   = "ecs-sg"
   # Inbound and outbound rules
   ingress {
     from_port   = var.ui.container_port
@@ -25,7 +25,7 @@ resource "aws_security_group" "ecs_sg" {
 
 # Create a security group for the load balancer:
 resource "aws_security_group" "lb_security_group" {
-  name        = "lb_sg-${var.env_suffix}"
+  name        = "lb-sg-${var.env_suffix}"
   description = "security group for the load_balancer"
   vpc_id      = data.aws_vpc.default.id
 
