@@ -7,8 +7,18 @@ resource "aws_security_group" "ecs_sg" {
   name   = "ecs-sg"
   # Inbound and outbound rules
   ingress {
+    description = "rule for inbound UI call"
     from_port   = var.ui.container_port
     to_port     = var.ui.container_port
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    #allowing the traffic from load balancer security group
+    security_groups = [aws_security_group.lb_security_group.id]
+  }
+  ingress {
+    description = "rule for inbound API call"
+    from_port   = var.api.container_port
+    to_port     = var.api.container_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
     #allowing the traffic from load balancer security group
