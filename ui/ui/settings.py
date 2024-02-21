@@ -9,6 +9,8 @@ class UISettings(BaseSettings):  # type: ignore # conflict between mypy v1.8 and
 
     # SERVER
     API_ENDPOINT_URL: str = "http://localhost:8080/api/v1/predict"
+    STREAMLIT_SERVER_HOST: str = "0.0.0.0"
+    STREAMLIT_SERVER_PORT: int = 8501
 
 
 settings = UISettings()
