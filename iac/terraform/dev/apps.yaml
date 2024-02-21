@@ -1,9 +1,6 @@
-apps:
-  api:
-    details:
-    - image: taggenerator/api
-      tag: "0.1.2"
-  ui:
-    details:
-    - image: taggenerator/ui
-      tag: "0.1.2"
+api:
+  image: taggenerator/api
+  tag: "0.2.1-rc.3"
+ui:
+  image: taggenerator/ui
+  tag: "0.2.1-rc.3"

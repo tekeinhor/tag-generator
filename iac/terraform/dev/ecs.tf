@@ -1,10 +1,14 @@
 locals {
-  api_image     = "637423196893.dkr.ecr.eu-west-3.amazonaws.com/taggenerator/api"
-  api_image_tag = "0.1.2"
+  # read api and ui version and image name from file and use them
+  apps = yamldecode(file("${path.module}/apps.yaml"))
 
-  ui_image     = "637423196893.dkr.ecr.eu-west-3.amazonaws.com/taggenerator/ui"
-  ui_image_tag = "0.1.2"
+  api = local.apps.api
+  ui  = local.apps.ui
+
+  api_image_id = "637423196893.dkr.ecr.eu-west-3.amazonaws.com/${local.api.image}:${local.api.tag}"
+  ui_image_id  = "637423196893.dkr.ecr.eu-west-3.amazonaws.com/${local.ui.image}:${local.ui.tag}"
 }
+
 
 module "ecs" {
   source       = "../modules/ecs"
@@ -14,7 +18,7 @@ module "ecs" {
   ui = {
     service_name   = "taggenerator-ui-service-dev"
     task_name      = "taggenerator-ui-task-dev"
-    image_id       = "${local.ui_image}:${local.ui_image_tag}"
+    image_id       = "${local.ui_image_id}"
     container_name = "taggenerator-ui-container"
     container_port = 8501
     port_name      = "taggenerator-ui-dev"
@@ -22,7 +26,7 @@ module "ecs" {
   api = {
     service_name   = "taggenerator-api-service-dev"
     task_name      = "taggenerator-api-task-dev"
-    image_id       = "${local.api_image}:${local.api_image_tag}"
+    image_id       = "${local.api_image_id}"
     container_name = "taggenerator-api-container"
     container_port = 8080
     port_name      = "taggenerator-api-dev"

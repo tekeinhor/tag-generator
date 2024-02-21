@@ -32,6 +32,7 @@ resource "aws_ecs_service" "api" {
 
 resource "aws_ecs_task_definition" "api_task" {
   family                   = var.api.task_name
+  network_mode             = "awsvpc"
   cpu                      = "256"
   memory                   = "512"
   requires_compatibilities = ["FARGATE"]
