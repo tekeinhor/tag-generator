@@ -12,6 +12,7 @@ streamlit-authenticator = "^0.2.3"
 pydantic-settings = "^2.1.0"
 types-requests = "^2.31.0.20240106"
 types-pyyaml = "^6.0.12.12"
+tools = {path="../libs/tools", develop=true}
 
 [build-system]
 requires = ["poetry-core"]

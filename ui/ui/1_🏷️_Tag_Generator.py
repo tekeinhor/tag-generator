@@ -1,12 +1,18 @@
 """UI for tag generator."""
 import json
 from http import HTTPStatus
+from pathlib import Path
 from typing import List
 
 import requests
 import streamlit as st
+from tools.logger import set_logger
 
 from ui.settings import settings
+
+current_file = Path(__file__)
+dirname = current_file.parent.stem
+logger = set_logger(dirname)
 
 st.set_page_config(
     page_title="Tag Generator",
@@ -17,6 +23,8 @@ st.set_page_config(
 def call_api(title: str, body: str) -> List[str]:
     """Call to the API for tags generation."""
     payload = {"title": title, "body": body}
+
+    logger.info("calling API at %s with payload: %s", settings.API_ENDPOINT_URL, payload)
     response = requests.post(settings.API_ENDPOINT_URL, data=json.dumps(payload), timeout=60)
     if response.status_code == HTTPStatus.OK:
         output = json.loads(response.content)
@@ -49,19 +57,24 @@ You can tap your own question, or copy paste from StackOverflow. And we will sug
         )
 
     if submit:
+        logger.info("the submit button has been hit")
         if title_input and body_text:
-            predictions = call_api(title=title_input, body=body_text)
-            # predictions = ("dictionary", "python", "vs-code", "py", "c#")
-            nb_predictions = len(predictions)
-            if nb_predictions == 0:
-                st.link_button("no-tag-found", "", type="secondary")
-            else:
-                cols = st.columns(nb_predictions, gap="small")
-                nb_cols_per_rows = 4
+            try:
+                predictions = call_api(title=title_input, body=body_text)
+                logger.info("api call was successfull %s", predictions)
+                nb_predictions = len(predictions)
+                if nb_predictions == 0:
+                    st.link_button("no-tag-found", "", type="secondary")
+                else:
+                    cols = st.columns(nb_predictions, gap="small")
+                    nb_cols_per_rows = 4
 
-                for i, col in enumerate(cols):
-                    # col = cols[i%nb_cols_per_rows]
-                    col.link_button(predictions[i], "")
+                    for i, col in enumerate(cols):
+                        # col = cols[i%nb_cols_per_rows]
+                        col.link_button(predictions[i], "")
+
+            except requests.exceptions.ConnectionError as error:
+                logger.error("An error has occured: %s", error)
+                notif_cols[0].error("Something went wrong on our side, please try again later.", icon="🚨")
         else:
             notif_cols[0].warning("You need to specify a title and a body!", icon="⚠️")
-            # st.warning("You need to specify a title and a body!", icon="⚠️")
