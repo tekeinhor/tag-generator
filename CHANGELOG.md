@@ -2,6 +2,33 @@
 
 
 
+## v0.3.0 (2024-02-21)
+
+### Feature
+
+* feat: create ui task, connect ui and api via service connect ([`61e0dff`](https://github.com/tekeinhor/tag-generator/commit/61e0dffa2315d19c27c930e522853e2900629824))
+
+### Refactor
+
+* refactor(ui): add logging and env var to UI for better monitoring when deployed ([`7579538`](https://github.com/tekeinhor/tag-generator/commit/75795386d171fd1fe185dda6f756330d4dbe7366))
+
+### Unknown
+
+* Merge pull request #23 from tekeinhor/refactor-ui-log
+
+refactor(ui): add logging and env var to UI for better monitoring whe… ([`3f749ae`](https://github.com/tekeinhor/tag-generator/commit/3f749ae8ec34a16703b0a07bb6da64e7d4bb46ba))
+
+* Merge pull request #22 from tekeinhor/bump-image-version
+
+bump: bump version of ui and api for deployment ([`f80a6a1`](https://github.com/tekeinhor/tag-generator/commit/f80a6a1fce1d898200fce38abee6222a50844e97))
+
+* bump: bump version of ui and api for deployment ([`335a6f8`](https://github.com/tekeinhor/tag-generator/commit/335a6f8aa2c895f2113e689e31f963afa7b45c92))
+
+* Merge pull request #21 from tekeinhor/feat-deploy-ui
+
+feat: create ui task, connect ui and api via service connect ([`4751724`](https://github.com/tekeinhor/tag-generator/commit/4751724db9feee9b3c531d1d53e5cfcb0b9e3cb2))
+
+
 ## v0.2.1-rc.3 (2024-02-19)
 
 ### Fix
