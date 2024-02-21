@@ -50,6 +50,7 @@ resource "aws_ecs_task_definition" "api_task" {
           containerPort = var.api.container_port
           hostPort      = var.api.container_port
           protocol      = "tcp"
+          appProtocol   = "http"
         }
       ]
       logConfiguration = {

@@ -18,7 +18,7 @@ module "ecs" {
   ui = {
     service_name   = "taggenerator-ui-service-dev"
     task_name      = "taggenerator-ui-task-dev"
-    image_id       = "${local.ui_image_id}"
+    image_id       = local.ui_image_id
     container_name = "taggenerator-ui-container"
     container_port = 8501
     port_name      = "taggenerator-ui-dev"
@@ -26,7 +26,7 @@ module "ecs" {
   api = {
     service_name   = "taggenerator-api-service-dev"
     task_name      = "taggenerator-api-task-dev"
-    image_id       = "${local.api_image_id}"
+    image_id       = local.api_image_id
     container_name = "taggenerator-api-container"
     container_port = 8080
     port_name      = "taggenerator-api-dev"
