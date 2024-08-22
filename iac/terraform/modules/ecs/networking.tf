@@ -48,8 +48,8 @@ resource "aws_eip" "elasticips" {
   domain   = "vpc"
 }
 
-resource "aws_nat_gateway" "nats" {
-  for_each      = local.private
+resource "aws_nat_gateway" "nats" { # nat gateway is created in public subnet, so its has "pub$" id
+  for_each      = local.public
   allocation_id = aws_eip.elasticips[each.key].id
   subnet_id     = aws_subnet.publics[each.key].id
 
@@ -78,7 +78,9 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route_table" "privates" {
-  for_each = local.private #there are as much route table as there are nat gateway, hence I used the variable used to create nat gateways
+  for_each = zipmap(keys(local.private), keys(local.public)) # looks like  {"priv1": "pub1", "priv2": "pub2"}
+  # these private routable are associated to nat get created with public key $pubs
+  
   vpc_id   = aws_vpc.tag_gen_vpc.id
 
   route {
@@ -88,22 +90,23 @@ resource "aws_route_table" "privates" {
 
   route {
     cidr_block = "0.0.0.0/0" # route all (other) traffic to nat gateway
-    gateway_id = aws_nat_gateway.nats[each.key].id
+    gateway_id = aws_nat_gateway.nats[each.value].id
   }
 
   tags = {
-    Name = "Private Route Table ${each.value.idx}"
+    Name = "Private Route Table ${each.key}"
   }
 }
 
 resource "aws_route_table_association" "publics" {
   for_each       = local.public
-  subnet_id      = aws_subnet.publics[each.key]
+  subnet_id      = aws_subnet.publics[each.key].id
   route_table_id = aws_route_table.public.id
 }
 
-resource "aws_route_table_association" "privates" {
+# Associate each private subnet with 
+resource "aws_route_table_association" "privates" { 
   for_each       = local.private
   subnet_id      = aws_subnet.privates[each.key].id
-  route_table_id = aws_route_table.privates[each.key].id
+  route_table_id = aws_route_table.privates[each.value].id
 }

@@ -7,38 +7,6 @@ variable "subnets" {
     type              = string
     idx               = number
   }))
-
-  default = {
-    key1 = {
-      cidr_block        = "10.0.0.0/24"
-      availability_zone = "eu-west-3a"
-      name              = "Public Subnet 1"
-      type              = "public"
-      idx               = 1
-
-    }
-    key2 = {
-      cidr_block        = "10.0.1.0/24"
-      availability_zone = "eu-west-3b"
-      name              = "Public Subnet 2"
-      type              = "public"
-      idx               = 2
-    }
-    key3 = {
-      cidr_block        = "10.0.2.0/23"
-      availability_zone = "eu-west-3a"
-      name              = "Private Subnet 1"
-      type              = "private"
-      idx               = 1
-    }
-    key4 = {
-      cidr_block        = "10.0.4.0/23"
-      availability_zone = "eu-west-3b"
-      type              = "private"
-      name              = "Private Subnet 2"
-      idx               = 2
-    }
-  }
 }
 
 
