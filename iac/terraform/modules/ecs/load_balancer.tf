@@ -19,7 +19,7 @@ resource "aws_lb_target_group" "target_group" {
 
 resource "aws_lb_listener" "listener" { # ALB listen to traffic on port 80
   load_balancer_arn = aws_lb.lb.arn     #  load balancer
-  port              = "80"              #tostring(var.ui.container_port)
+  port              = tostring(var.ui.container_port)
   protocol          = "HTTP"
   default_action {
     type             = "forward"

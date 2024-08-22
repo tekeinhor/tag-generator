@@ -45,6 +45,10 @@ resource "aws_ecs_task_definition" "ui_task" {
         {
           name  = "API_ENDPOINT_URL"
           value = "http://${var.api.dns_name}:${var.api.container_port}/api/v1/predict" #  should look like this http://dev-api:8080/api/v1/predict
+        },
+        {
+          name  = "STREAMLIT_SERVER_PORT"
+          value = tostring(var.ui.container_port)
         }
       ]
       portMappings = [
