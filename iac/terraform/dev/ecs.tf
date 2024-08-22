@@ -13,12 +13,9 @@ locals {
   ui_image_id  = "637423196893.dkr.ecr.eu-west-3.amazonaws.com/${local.ui.image}:${local.ui.tag}"
 }
 
-
 module "ecs" {
   source       = "../modules/ecs"
-  vpc_id       = "vpc-072487b7c91bc9b10"
   cluster_name = "taggenerator-cluster-dev"
-
   ui = {
     service_name   = "taggenerator-ui-service-dev"
     task_name      = "taggenerator-ui-task-dev"
@@ -36,10 +33,40 @@ module "ecs" {
     port_name      = "taggenerator-api-dev"
     dns_name       = "dev-api"
   }
+  subnets = {
+    pub1 = {
+      cidr_block        = "10.0.0.0/24"
+      availability_zone = "eu-west-3a"
+      name              = "Public Subnet 1"
+      type              = "public"
+      idx               = 1
 
-  vpc_id_subnet_list = ["subnet-0de4d1ef85bb6eb27", "subnet-0520e52980fe894b7", "subnet-0ee513191854aaaa5"]
-  bucket_name        = "tek-tag-generator-dev"
-  region             = local.region
-  log_group          = "awslogs-tagggenerator"
-  env_suffix         = "dev"
+    }
+    pub2 = {
+      cidr_block        = "10.0.1.0/24"
+      availability_zone = "eu-west-3b"
+      name              = "Public Subnet 2"
+      type              = "public"
+      idx               = 2
+    }
+    priv1 = {
+      cidr_block        = "10.0.2.0/23"
+      availability_zone = "eu-west-3a"
+      name              = "Private Subnet 1"
+      type              = "private"
+      idx               = 1
+    }
+    priv2 = {
+      cidr_block        = "10.0.4.0/23"
+      availability_zone = "eu-west-3b"
+      name              = "Private Subnet 2"
+      type              = "private"
+      idx               = 2
+    }
+  }
+
+  bucket_name = "tek-tag-generator-dev"
+  region      = local.region
+  log_group   = "awslogs-tagggenerator"
+  env_suffix  = "dev"
 }

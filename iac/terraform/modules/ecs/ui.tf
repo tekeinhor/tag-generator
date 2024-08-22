@@ -6,13 +6,13 @@ resource "aws_ecs_service" "ui" {
   name            = var.ui.service_name
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.ui_task.arn
-  desired_count   = 1
+  desired_count   = 2
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [var.vpc_id_subnet_list[0], var.vpc_id_subnet_list[1], var.vpc_id_subnet_list[2]]
-    security_groups  = [aws_security_group.ecs_sg.id]
-    assign_public_ip = true
+    subnets          = [for subnet in aws_subnet.privates : subnet.id]
+    security_groups  = [aws_security_group.ecs_ui_sg.id]
+    assign_public_ip = false
   }
 
   load_balancer {
@@ -51,8 +51,8 @@ resource "aws_ecs_task_definition" "ui_task" {
         {
           name          = var.ui.port_name
           containerPort = var.ui.container_port
-          hostPort      = var.ui.container_port
-          protocol      = "tcp"
+          # hostPort      = var.ui.container_port
+          protocol = "tcp"
         }
       ]
       logConfiguration = {

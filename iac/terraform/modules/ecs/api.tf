@@ -7,13 +7,13 @@ resource "aws_ecs_service" "api" {
   name            = var.api.service_name
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.api_task.arn
-  desired_count   = 1
+  desired_count   = 2
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [var.vpc_id_subnet_list[0], var.vpc_id_subnet_list[1], var.vpc_id_subnet_list[2]]
-    security_groups  = [aws_security_group.ecs_sg.id]
-    assign_public_ip = true
+    subnets          = [for subnet in aws_subnet.privates : subnet.id]
+    security_groups  = [aws_security_group.ecs_api_sg.id]
+    assign_public_ip = false
   }
   service_connect_configuration { # configure client-server service to be reachable using service connect
     enabled   = true

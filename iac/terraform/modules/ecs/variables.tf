@@ -1,7 +1,14 @@
-variable "vpc_id" {
-  description = "Id of the existing VPC."
-  type        = string
+variable "subnets" {
+  description = "Subnets creation info"
+  type = map(object({
+    cidr_block        = string
+    availability_zone = string
+    name              = string
+    type              = string
+    idx               = number
+  }))
 }
+
 
 variable "cluster_name" {
   description = "Id of the existing VPC."
@@ -32,12 +39,6 @@ variable "api" {
     container_port = number
     dns_name       = string
   })
-}
-
-
-variable "vpc_id_subnet_list" {
-  description = "Subnets of the existing VPC."
-  type        = list(string)
 }
 
 variable "bucket_name" {
