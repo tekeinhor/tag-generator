@@ -12,7 +12,7 @@ resource "aws_ecs_service" "api" {
 
   network_configuration {
     subnets          = aws_subnet.privates[*].id
-    security_groups  = [aws_security_group.ecs_api.id]
+    security_groups  = [aws_security_group.ecs_api_sg.id]
     assign_public_ip = true
   }
   service_connect_configuration { # configure client-server service to be reachable using service connect

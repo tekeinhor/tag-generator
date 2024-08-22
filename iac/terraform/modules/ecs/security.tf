@@ -22,7 +22,7 @@ resource "aws_security_group" "ecs_ui_sg" {
 }
 
 
-resource "aws_security_group" "ecs_api" {
+resource "aws_security_group" "ecs_api_sg" {
   vpc_id = aws_vpc.tag_gen_vpc.id
   name   = "ecs-api"
   # Inbound and outbound rules

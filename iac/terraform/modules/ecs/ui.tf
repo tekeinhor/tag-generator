@@ -11,7 +11,7 @@ resource "aws_ecs_service" "ui" {
 
   network_configuration {
     subnets          = aws_subnet.privates[*].id
-    security_groups  = [aws_security_group.ecs_sg.id]
+    security_groups  = [aws_security_group.ecs_ui_sg.id]
     assign_public_ip = true
   }
 
