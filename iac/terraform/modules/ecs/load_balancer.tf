@@ -2,7 +2,7 @@
 resource "aws_lb" "lb" {
   name               = "load-balancer-${var.env_suffix}" #load balancer name
   load_balancer_type = "application"
-  subnets            = aws_subnet.publics[*].id
+  subnets            = [for subnet in aws_subnet.publics : subnet.id]
   internal           = false
   # security group
   security_groups = [aws_security_group.lb_security_group.id]

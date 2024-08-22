@@ -80,8 +80,8 @@ resource "aws_route_table" "public" {
 resource "aws_route_table" "privates" {
   for_each = zipmap(keys(local.private), keys(local.public)) # looks like  {"priv1": "pub1", "priv2": "pub2"}
   # these private routable are associated to nat get created with public key $pubs
-  
-  vpc_id   = aws_vpc.tag_gen_vpc.id
+
+  vpc_id = aws_vpc.tag_gen_vpc.id
 
   route {
     cidr_block = "10.0.0.0/20" # route all traffic from those IP add to local
@@ -105,7 +105,7 @@ resource "aws_route_table_association" "publics" {
 }
 
 # Associate each private subnet with 
-resource "aws_route_table_association" "privates" { 
+resource "aws_route_table_association" "privates" {
   for_each       = local.private
   subnet_id      = aws_subnet.privates[each.key].id
   route_table_id = aws_route_table.privates[each.value].id

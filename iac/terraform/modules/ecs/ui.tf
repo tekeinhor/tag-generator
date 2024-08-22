@@ -10,9 +10,9 @@ resource "aws_ecs_service" "ui" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = aws_subnet.privates[*].id
+    subnets          = [for subnet in aws_subnet.privates : subnet.id]
     security_groups  = [aws_security_group.ecs_ui_sg.id]
-    assign_public_ip = true
+    assign_public_ip = false
   }
 
   load_balancer {

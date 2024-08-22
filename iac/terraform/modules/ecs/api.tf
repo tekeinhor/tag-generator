@@ -11,9 +11,9 @@ resource "aws_ecs_service" "api" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = aws_subnet.privates[*].id
+    subnets          = [for subnet in aws_subnet.private : subnet.id]
     security_groups  = [aws_security_group.ecs_api_sg.id]
-    assign_public_ip = true
+    assign_public_ip = false
   }
   service_connect_configuration { # configure client-server service to be reachable using service connect
     enabled   = true
