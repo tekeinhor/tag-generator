@@ -9,7 +9,7 @@ locals {
 ####### VPC #######
 
 resource "aws_vpc" "tag_gen_vpc" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block = "10.0.0.0/20"
 }
 
 ####### Private and Public Subnet #######
