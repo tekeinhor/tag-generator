@@ -28,11 +28,13 @@ variable "subnets" {
       cidr_block        = "10.0.2.0/23"
       availability_zone = "eu-west-3a"
       name              = "Private Subnet 1"
+      type              = "private"
       idx               = 1
     }
     key4 = {
       cidr_block        = "10.0.4.0/23"
       availability_zone = "eu-west-3b"
+      type              = "private"
       name              = "Private Subnet 2"
       idx               = 2
     }
