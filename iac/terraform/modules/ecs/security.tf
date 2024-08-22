@@ -1,6 +1,6 @@
 resource "aws_security_group" "ecs_ui_sg" {
   vpc_id = aws_vpc.tag_gen_vpc.id
-  name   = "ecs-ui"
+  name   = "ecs-ui-${var.env_suffix}"
   # Inbound and outbound rules
   ingress {
     description = "rule for inbound UI call"
@@ -24,7 +24,7 @@ resource "aws_security_group" "ecs_ui_sg" {
 
 resource "aws_security_group" "ecs_api_sg" {
   vpc_id = aws_vpc.tag_gen_vpc.id
-  name   = "ecs-api"
+  name   = "ecs-api-${var.env_suffix}"
   # Inbound and outbound rules
   ingress {
     description = "rule for inbound API call"
