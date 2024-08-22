@@ -4,7 +4,7 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 
 resource "aws_service_discovery_private_dns_namespace" "this" {
   name = "taggenerator.${var.env_suffix}"
-  vpc  = data.aws_vpc.default.id
+  vpc  = aws_vpc.tag_gen_vpc.id
 }
 
 
